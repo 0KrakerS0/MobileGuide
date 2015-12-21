@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ import st.pawel.mobilnyprzewodnik.main.ui.model.MenuItemView;
 
 public class MenuFragment extends DelegateBaseFragment<MenuFragmentDelegate> {
 
+    @Bind(R.id.main_menu_list)
     RecyclerView mainMenuList;
 
     public static MenuFragment newInstance() {
@@ -33,7 +36,7 @@ public class MenuFragment extends DelegateBaseFragment<MenuFragmentDelegate> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_menu, container, false);
-        mainMenuList = (RecyclerView) view.findViewById(R.id.main_menu_list);
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -51,6 +54,12 @@ public class MenuFragment extends DelegateBaseFragment<MenuFragmentDelegate> {
             adapter.addMenuItem(mainMenu);
         }
         mainMenuList.setAdapter(adapter);
+        adapter.setOnMenuItemClick(new MenuAdapter.OnMenuItemClick() {
+            @Override
+            public void onMenuItemClick(MenuItemView menuItemView) {
+                delegate.onMenuItemClick(menuItemView);
+            }
+        });
         adapter.notifyDataSetChanged();
     }
 

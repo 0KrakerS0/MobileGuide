@@ -5,7 +5,7 @@ import android.content.Context;
 
 public abstract class DelegateBaseFragment<DELEGATE> extends BaseFragment {
 
-    DELEGATE delegate;
+    protected DELEGATE delegate;
 
     @Override
     public void onAttach(Context context) {

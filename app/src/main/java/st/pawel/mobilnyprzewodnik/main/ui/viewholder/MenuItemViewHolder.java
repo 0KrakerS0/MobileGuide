@@ -5,20 +5,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.main.ui.model.MenuItemView;
 
 public class MenuItemViewHolder extends RecyclerView.ViewHolder {
 
+    @Bind(R.id.menu_item_icon)
     ImageView icon;
 
+    @Bind(R.id.menu_item_label)
     TextView label;
 
     public MenuItemViewHolder(View itemView) {
         super(itemView);
-
-        icon = (ImageView) itemView.findViewById(R.id.menu_item_icon);
-        label = (TextView) itemView.findViewById(R.id.menu_item_label);
+        ButterKnife.bind(this, itemView);
     }
 
     public void bind(MenuItemView menuItemView){
