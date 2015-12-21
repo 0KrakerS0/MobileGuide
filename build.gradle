@@ -1,0 +1,22 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        def class_paths =[
+                'com.android.tools.build:gradle:1.5.0',
+                'com.neenbedankt.gradle.plugins:android-apt:1.8',
+        ]
+        classpath class_paths
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

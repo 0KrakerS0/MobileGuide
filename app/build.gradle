@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+
+    defaultConfig {
+        applicationId 'st.pawel.mobilnyprzewodnik'
+        minSdkVersion 10
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix '.debug'
+
+        }
+    }
+}
+
+def compile_libs = [
+        'com.android.support:appcompat-v7:23.1.1',
+        'com.android.support:design:23.1.1',
+        'com.android.support:recyclerview-v7:23.1.l',
+        'com.jakewharton:butterknife:7.0.1',
+        'com.google.dagger:dagger:2.0.2',
+]
+
+def apt_libs =[
+        'com.google.dagger:dagger-compiler:2.0.2',
+        'org.projectlombok:lombok:1.16.6',
+]
+
+def provided_libs = [
+        'org.projectlombok:lombok:1.16.6',
+        'javax.annotation:jsr250-api:1.0',
+        'javax.inject:javax.inject:1'
+]
+def test_compile_libs = [
+        'junit:junit:4.12',
+]
+
+dependencies {
+    testCompile test_compile_libs
+    compile compile_libs
+    apt apt_libs
+    provided provided_libs
+}

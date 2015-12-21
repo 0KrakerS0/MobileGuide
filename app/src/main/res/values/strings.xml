@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Mobilny przewodnik po miastach Polski</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="main_menu_map">Mapy</string>
+    <string name="main_menu_ciy_list">List miast</string>
+    <string name="main_menu_travel_list">Lista wycieczek</string>
+    <string name="main_menu_user_data">Dane użytkownika</string>
+    <string name="main_menu_logout">Wyloguj</string>
+</resources>
