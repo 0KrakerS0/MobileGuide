@@ -12,14 +12,25 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+        mobile_guide {
+            storeFile file("${rootDir}/dev_tools/mobile_guide.keystore")
+            storePassword MOBILE_GUIDE_KEY_PASS
+            keyAlias MOBILE_GUIDE_KEY_ALIAS
+            keyPassword MOBILE_GUIDE_STORE_PASS
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig android.signingConfigs.mobile_guide
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            signingConfig android.signingConfigs.mobile_guide
             applicationIdSuffix '.debug'
-
         }
     }
 }
@@ -30,6 +41,7 @@ def compile_libs = [
         'com.android.support:recyclerview-v7:23.1.l',
         'com.jakewharton:butterknife:7.0.1',
         'com.google.dagger:dagger:2.0.2',
+        'com.google.android.gms:play-services:3.1.36',
 ]
 
 def apt_libs =[

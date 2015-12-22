@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import st.pawel.mobilnyprzewodnik.R;
@@ -23,7 +22,7 @@ public class MenuItemViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(MenuItemView menuItemView){
+    public void bind(MenuItemView menuItemView) {
         icon.setImageResource(menuItemView.iconRes());
         label.setText(menuItemView.labelRes());
     }
