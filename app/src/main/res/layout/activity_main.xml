@@ -25,6 +25,7 @@
     </LinearLayout>
     <FrameLayout
             android:id="@+id/main_menu_container"
+            android:background="@color/main_menu_bg"
             android:layout_gravity="start"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
