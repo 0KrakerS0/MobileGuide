@@ -2,6 +2,7 @@ package st.pawel.mobilnyprzewodnik.city.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,8 +11,11 @@ import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 import st.pawel.mobilnyprzewodnik.city.ui.viewholder.CityViewHolder;
 
 
-public class CityAdapter extends RecyclerView.Adapter<CityViewHolder>{
+public class CityAdapter extends RecyclerView.Adapter<CityViewHolder> {
+
     List<CityView> cityViews;
+
+    OnCityItemClickListener onCityItemClickListener = OnCityItemClickListener.NULL;
 
     public CityAdapter() {
         cityViews = new LinkedList<>();
@@ -19,7 +23,13 @@ public class CityAdapter extends RecyclerView.Adapter<CityViewHolder>{
 
     @Override
     public CityViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        CityViewHolder holder = new CityViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_city, parent, false));
+        final CityViewHolder holder = new CityViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_city, parent, false));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCityItemClickListener.onCityItemClick(cityViews.get(holder.getAdapterPosition()));
+            }
+        });
         return holder;
     }
 
@@ -33,8 +43,24 @@ public class CityAdapter extends RecyclerView.Adapter<CityViewHolder>{
         return cityViews.size();
     }
 
-    public void add(CityView cityView){
+    public void add(CityView cityView) {
         cityViews.add(cityView);
+    }
+
+    public void setOnCityItemClickListener(OnCityItemClickListener listener) {
+        this.onCityItemClickListener = listener != null ? listener : OnCityItemClickListener.NULL;
+    }
+
+    public interface OnCityItemClickListener {
+
+        OnCityItemClickListener NULL = new OnCityItemClickListener() {
+            @Override
+            public void onCityItemClick(CityView cityView) {
+
+            }
+        };
+
+        void onCityItemClick(CityView cityView);
     }
 }
 

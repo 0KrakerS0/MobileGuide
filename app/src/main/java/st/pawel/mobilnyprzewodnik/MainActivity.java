@@ -11,6 +11,8 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.google.android.gms.maps.MapFragment;
+import st.pawel.mobilnyprzewodnik.city.delegate.CityFragmentDelegate;
+import st.pawel.mobilnyprzewodnik.city.model.CityModel;
 import st.pawel.mobilnyprzewodnik.city.ui.CityFragment;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
 import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
@@ -19,7 +21,7 @@ import st.pawel.mobilnyprzewodnik.main.ui.MenuFragment;
 import st.pawel.mobilnyprzewodnik.map.ui.MainMapFragment;
 import st.pawel.mobilnyprzewodnik.travels.ui.TravelsFragment;
 
-public class MainActivity extends BaseActivity implements MenuFragmentDelegate<MainMenu> {
+public class MainActivity extends BaseActivity implements MenuFragmentDelegate<MainMenu>, CityFragmentDelegate<CityModel> {
 
 
     @Bind(R.id.main_toolbar)
@@ -75,6 +77,11 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
     }
 
     @Override
+    public void onCityClick(CityModel cityModel) {
+        Toast.makeText(this, "Kliknales " + cityModel.cityName(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -99,4 +106,5 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
             mainDrawer.openDrawer(GravityCompat.START);
         }
     }
+
 }

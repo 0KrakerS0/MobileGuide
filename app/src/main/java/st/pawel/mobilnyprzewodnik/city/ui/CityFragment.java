@@ -1,6 +1,7 @@
 package st.pawel.mobilnyprzewodnik.city.ui;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,12 +14,14 @@ import butterknife.ButterKnife;
 import java.util.LinkedList;
 import java.util.List;
 import st.pawel.mobilnyprzewodnik.R;
+import st.pawel.mobilnyprzewodnik.city.delegate.CityFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.city.model.CityModel;
 import st.pawel.mobilnyprzewodnik.city.ui.adapter.CityAdapter;
-import st.pawel.mobilnyprzewodnik.common.ui.BaseFragment;
+import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
+import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
 
 
-public class CityFragment extends BaseFragment{
+public class CityFragment extends DelegateBaseFragment<CityFragmentDelegate>{
     @Bind(R.id.city_list)
     RecyclerView cityList;
 
@@ -44,11 +47,18 @@ public class CityFragment extends BaseFragment{
     private void prepareCityList() {
         cityList.setLayoutManager(new LinearLayoutManager(getContext()));
         final CityAdapter adapter = new CityAdapter();
+        adapter.setOnCityItemClickListener(new CityAdapter.OnCityItemClickListener() {
+            @Override
+            public void onCityItemClick(CityView cityView) {
+                delegate.onCityClick(cityView);
+            }
+        });
         cityList.setAdapter(adapter);
         List<CityModel> list = createCityList();
-        for (CityModel travel : list) {
-            adapter.add(travel);
+        for (CityModel city : list) {
+            adapter.add(city);
         }
+
     }
 
 
@@ -64,4 +74,13 @@ public class CityFragment extends BaseFragment{
         return list;
     }
 
+    @Override
+    protected boolean instanceOfDelegate(Context context) {
+        return context instanceof CityFragmentDelegate;
+    }
+
+    @Override
+    protected String delegateClassName() {
+        return CityFragmentDelegate.class.getSimpleName();
+    }
 }
