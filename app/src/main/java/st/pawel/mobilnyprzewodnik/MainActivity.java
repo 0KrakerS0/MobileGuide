@@ -10,11 +10,13 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.google.android.gms.maps.MapFragment;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
 import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.main.model.MainMenu;
 import st.pawel.mobilnyprzewodnik.main.ui.MenuFragment;
 import st.pawel.mobilnyprzewodnik.map.ui.MainMapFragment;
+import st.pawel.mobilnyprzewodnik.travels.ui.TravelsFragment;
 
 public class MainActivity extends BaseActivity implements MenuFragmentDelegate<MainMenu> {
 
@@ -31,6 +33,9 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         prepareActionBar();
+        if(savedInstanceState != null){
+            return;
+        }
         getSupportFragmentManager().beginTransaction().replace(R.id.main_menu_container, MenuFragment.newInstance()).commit();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_container, MainMapFragment.newInstance()).commit();
     }
@@ -47,7 +52,25 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
 
     @Override
     public void onMenuItemClick(MainMenu menu) {
-        Toast.makeText(this, "Jeszcze nie działa dla " + menu.name(), Toast.LENGTH_SHORT).show();
+
+        switch (menu) {
+            case MAP:
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, MainMapFragment.newInstance()).commit();
+                break;
+            case CITY_LIST:
+                Toast.makeText(this, "Jeszcze nie działa dla " + menu.name(), Toast.LENGTH_SHORT).show();
+                break;
+            case TRAVEL_LIST:
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, TravelsFragment.newInstance()).commit();
+                break;
+            case USER_DATA:
+                Toast.makeText(this, "Jeszcze nie działa dla " + menu.name(), Toast.LENGTH_SHORT).show();
+                break;
+            case LOGOUT:
+                Toast.makeText(this, "Jeszcze nie działa dla " + menu.name(), Toast.LENGTH_SHORT).show();
+                break;
+        }
+        mainDrawer.closeDrawer(GravityCompat.START);
     }
 
     @Override
