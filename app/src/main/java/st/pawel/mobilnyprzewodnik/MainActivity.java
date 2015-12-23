@@ -11,6 +11,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.google.android.gms.maps.MapFragment;
+import st.pawel.mobilnyprzewodnik.city.ui.CityFragment;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
 import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.main.model.MainMenu;
@@ -58,7 +59,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, MainMapFragment.newInstance()).commit();
                 break;
             case CITY_LIST:
-                Toast.makeText(this, "Jeszcze nie działa dla " + menu.name(), Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, CityFragment.newInstance()).commit();
                 break;
             case TRAVEL_LIST:
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, TravelsFragment.newInstance()).commit();
