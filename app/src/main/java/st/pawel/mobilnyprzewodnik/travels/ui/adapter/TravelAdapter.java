@@ -3,6 +3,7 @@ package st.pawel.mobilnyprzewodnik.travels.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,13 +15,22 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelViewHolder> {
 
     List<TravelView> travelViews;
 
+    OnTravelItemClickListener onTravelItemClickListener = OnTravelItemClickListener.NULL;
+
+
     public TravelAdapter() {
         travelViews = new LinkedList<>();
     }
 
     @Override
     public TravelViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TravelViewHolder holder = new TravelViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_travel, parent, false));
+        final TravelViewHolder holder = new TravelViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_travel, parent, false));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onTravelItemClickListener.onTravelClick(travelViews.get(holder.getAdapterPosition()));
+            }
+        });
         return holder;
     }
 
@@ -36,5 +46,22 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelViewHolder> {
 
     public void add(TravelView travelView){
         travelViews.add(travelView);
+    }
+
+
+    public void setOnTravelItemClickListener(OnTravelItemClickListener listener) {
+        this.onTravelItemClickListener = listener!=null ? listener : OnTravelItemClickListener.NULL;
+    }
+
+
+    public interface OnTravelItemClickListener {
+
+        OnTravelItemClickListener NULL = new OnTravelItemClickListener() {
+            @Override
+            public void onTravelClick(TravelView travelView) {
+
+            }
+        };
+        void onTravelClick(TravelView travelView);
     }
 }

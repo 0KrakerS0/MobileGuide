@@ -19,9 +19,11 @@ import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.main.model.MainMenu;
 import st.pawel.mobilnyprzewodnik.main.ui.MenuFragment;
 import st.pawel.mobilnyprzewodnik.map.ui.MainMapFragment;
+import st.pawel.mobilnyprzewodnik.travels.delegate.TravelFragmentDelegate;
+import st.pawel.mobilnyprzewodnik.travels.model.Travel;
 import st.pawel.mobilnyprzewodnik.travels.ui.TravelsFragment;
 
-public class MainActivity extends BaseActivity implements MenuFragmentDelegate<MainMenu>, CityFragmentDelegate<CityModel> {
+public class MainActivity extends BaseActivity implements MenuFragmentDelegate<MainMenu>, CityFragmentDelegate<CityModel>, TravelFragmentDelegate<Travel> {
 
 
     @Bind(R.id.main_toolbar)
@@ -79,6 +81,11 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
     @Override
     public void onCityClick(CityModel cityModel) {
         Toast.makeText(this, "Kliknales " + cityModel.cityName(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onTravelClick(Travel travel) {
+        Toast.makeText(this, "Kliknales " + travel.name(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
