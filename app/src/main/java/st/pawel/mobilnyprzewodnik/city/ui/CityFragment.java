@@ -9,21 +9,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import java.util.LinkedList;
-import java.util.List;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.city.delegate.CityFragmentDelegate;
-import st.pawel.mobilnyprzewodnik.city.model.CityModel;
+import st.pawel.mobilnyprzewodnik.city.listener.OnCityRequestSuccessListener;
 import st.pawel.mobilnyprzewodnik.city.ui.adapter.CityAdapter;
 import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
 
 
-public class CityFragment extends DelegateBaseFragment<CityFragmentDelegate>{
+public class CityFragment extends DelegateBaseFragment<CityFragmentDelegate> implements OnCityRequestSuccessListener {
     @Bind(R.id.city_list)
     RecyclerView cityList;
+
+    CityAdapter adapter;
 
     public static CityFragment newInstance() {
         CityFragment cityFragment = new CityFragment();
@@ -46,7 +49,7 @@ public class CityFragment extends DelegateBaseFragment<CityFragmentDelegate>{
 
     private void prepareCityList() {
         cityList.setLayoutManager(new LinearLayoutManager(getContext()));
-        final CityAdapter adapter = new CityAdapter();
+        adapter = new CityAdapter();
         adapter.setOnCityItemClickListener(new CityAdapter.OnCityItemClickListener() {
             @Override
             public void onCityItemClick(CityView cityView) {
@@ -54,24 +57,13 @@ public class CityFragment extends DelegateBaseFragment<CityFragmentDelegate>{
             }
         });
         cityList.setAdapter(adapter);
-        List<CityModel> list = createCityList();
-        for (CityModel city : list) {
-            adapter.add(city);
-        }
-
+        delegate.requestForCityList();
     }
 
-
-    List<CityModel> createCityList() {
-        List<CityModel> list = new LinkedList<>();
-        list.add(new CityModel("Lublin"));
-        list.add(new CityModel("Warszawa"));
-        list.add(new CityModel("Poznań"));
-        list.add(new CityModel("Kraków"));
-        list.add(new CityModel("Wrocław"));
-        list.add(new CityModel("Gdańsk"));
-        list.add(new CityModel("Szczecin"));
-        return list;
+    @Override
+    public void onCityRequestSuccess(List<CityView> cityViews) {
+        adapter.setNewListItems(cityViews);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

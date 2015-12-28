@@ -1,5 +1,6 @@
 package st.pawel.mobilnyprzewodnik;
 
+import  android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,10 +12,23 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.google.android.gms.maps.MapFragment;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 import st.pawel.mobilnyprzewodnik.city.delegate.CityFragmentDelegate;
+import st.pawel.mobilnyprzewodnik.city.listener.OnCityRequestSuccessListener;
 import st.pawel.mobilnyprzewodnik.city.model.CityModel;
+import st.pawel.mobilnyprzewodnik.city.model.CityResults;
+import st.pawel.mobilnyprzewodnik.city.network.GetCityRequest;
+import st.pawel.mobilnyprzewodnik.city.network.PostCityRequest;
 import st.pawel.mobilnyprzewodnik.city.ui.CityFragment;
+import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
+import st.pawel.mobilnyprzewodnik.common.ui.BaseFragment;
 import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.main.model.MainMenu;
 import st.pawel.mobilnyprzewodnik.main.ui.MenuFragment;
@@ -81,6 +95,21 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
     @Override
     public void onCityClick(CityModel cityModel) {
         Toast.makeText(this, "Kliknales " + cityModel.cityName(), Toast.LENGTH_SHORT).show();
+        CityModel cm = new CityModel();
+        cm.setCityName("Poznań");
+        PostCityRequest.instance().withCityModel(cm).request().enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Response<Void> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Toast.makeText(MainActivity.this, "Dodales miasto", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
 
     @Override
@@ -114,4 +143,27 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
         }
     }
 
+    @Override
+    public void requestForCityList() {
+        GetCityRequest.instance().request().enqueue(new Callback<CityResults>() {
+            @Override
+            public void onResponse(Response<CityResults> response, Retrofit retrofit) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+                if(fragment == null || !(fragment instanceof OnCityRequestSuccessListener)){
+                    return;
+                }
+                OnCityRequestSuccessListener listener = (OnCityRequestSuccessListener) fragment;
+                List<CityView> result = new LinkedList<CityView>();
+                for (CityModel city : response.body()) {
+                    result.add(city);
+                }
+                listener.onCityRequestSuccess(result);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
 }

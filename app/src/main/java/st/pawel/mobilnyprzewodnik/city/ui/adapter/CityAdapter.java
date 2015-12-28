@@ -51,6 +51,11 @@ public class CityAdapter extends RecyclerView.Adapter<CityViewHolder> {
         this.onCityItemClickListener = listener != null ? listener : OnCityItemClickListener.NULL;
     }
 
+    public void setNewListItems(List<CityView> cityViews) {
+        this.cityViews.clear();
+        this.cityViews.addAll(cityViews);
+    }
+
     public interface OnCityItemClickListener {
 
         OnCityItemClickListener NULL = new OnCityItemClickListener() {
