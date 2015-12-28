@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="main_menu_bg">#E0F2F1</color>
     <color name="menu_item_text_color">#004D40</color>
+    <color name="floating_button_color">#d500f9</color>
 </resources>

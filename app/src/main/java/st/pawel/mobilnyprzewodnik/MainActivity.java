@@ -96,33 +96,18 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
     @Override
     public void onCityClick(CityModel cityModel) {
         Toast.makeText(this, "Kliknales " + cityModel.cityName(), Toast.LENGTH_SHORT).show();
-        CityModel cm = new CityModel();
-        cm.setCityName("Poznań");
-        PostCityRequest.instance().withCityModel(cm).request().enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Response<Void> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Toast.makeText(MainActivity.this, "Dodales miasto", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
     }
 
     @Override
     public void onTravelClick(Travel travel) {
         Toast.makeText(this, "Kliknales " + travel.name(), Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -171,6 +156,11 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
                 listener.onCityRequestFailure();
             }
         });
+    }
+
+    @Override
+    public void onAddCityButtonClick() {
+        Toast.makeText(this, "Doda sie nowy item", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -8,4 +8,6 @@ public interface CityFragmentDelegate<CITY extends CityView>{
     void onCityClick(CITY city);
 
     void requestForCityList();
+
+    void onAddCityButtonClick();
 }

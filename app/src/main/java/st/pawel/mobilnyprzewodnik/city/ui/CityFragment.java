@@ -15,6 +15,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.city.delegate.CityFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.city.listener.OnCityRequestListener;
@@ -80,5 +81,10 @@ public class CityFragment extends DelegateBaseFragment<CityFragmentDelegate> imp
     @Override
     protected String delegateClassName() {
         return CityFragmentDelegate.class.getSimpleName();
+    }
+
+    @OnClick(R.id.city_list_add_city_button)
+    void onAddCityButtonClick(){
+        delegate.onAddCityButtonClick();
     }
 }
