@@ -25,6 +25,7 @@ import st.pawel.mobilnyprzewodnik.city.model.CityModel;
 import st.pawel.mobilnyprzewodnik.city.model.CityResults;
 import st.pawel.mobilnyprzewodnik.city.network.GetCityRequest;
 import st.pawel.mobilnyprzewodnik.city.network.PostCityRequest;
+import st.pawel.mobilnyprzewodnik.city.ui.CityActivity;
 import st.pawel.mobilnyprzewodnik.city.ui.CityFragment;
 import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
@@ -52,7 +53,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        prepareActionBar();
+        prepareActionBar(mainActionBar);
         if(savedInstanceState != null){
             return;
         }
@@ -60,14 +61,13 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
         getSupportFragmentManager().beginTransaction().replace(R.id.main_container, MainMapFragment.newInstance()).commit();
     }
 
-    void prepareActionBar() {
-        setSupportActionBar(mainActionBar);
-        final ActionBar actionBar = getSupportActionBar();
+    protected ActionBar prepareActionBar(Toolbar toolbar) {
+        ActionBar actionBar = super.prepareActionBar(toolbar);
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_action_menu);
         }
-
+        return actionBar;
     }
 
     @Override
@@ -117,10 +117,9 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
             case android.R.id.home:
                 openDrawer();
                 return true;
-            case R.id.action_settings:
-                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void openDrawer() {
@@ -160,7 +159,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
 
     @Override
     public void onAddCityButtonClick() {
-        Toast.makeText(this, "Doda sie nowy item", Toast.LENGTH_SHORT).show();
+       startActivity(CityActivity.IntentFactory.forDisplay(this));
     }
 
     @Override
