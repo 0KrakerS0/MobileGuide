@@ -8,14 +8,15 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
+import st.pawel.mobilnyprzewodnik.common.util.ImageLoaderProvider;
 
 public class CityViewHolder extends RecyclerView.ViewHolder{
 
-    //@Bind(R.id.city_icon)
-    //ImageView cityicon;
+    @Bind(R.id.city_icon)
+    ImageView cityIcon;
 
     @Bind(R.id.city_name)
-    TextView cityname;
+    TextView cityName;
 
     public CityViewHolder(View citysView) {
         super(citysView);
@@ -23,7 +24,7 @@ public class CityViewHolder extends RecyclerView.ViewHolder{
     }
 
     public void bind(CityView cityView) {
-        //cityicon.setImageResource(cityView.cityIcon());
-        cityname.setText(cityView.cityName());
+        ImageLoaderProvider.newInstance(cityIcon.getContext()).displayImage(cityView.cityImageUrl(), cityIcon);
+        cityName.setText(cityView.cityName());
     }
 }
