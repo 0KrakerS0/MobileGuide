@@ -18,6 +18,7 @@ import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.main.model.MainMenu;
 import st.pawel.mobilnyprzewodnik.main.ui.adapter.MenuAdapter;
 import st.pawel.mobilnyprzewodnik.main.ui.model.MenuItemView;
+import st.pawel.mobilnyprzewodnik.main.ui.model.UserView;
 
 public class MenuFragment extends DelegateBaseFragment<MenuFragmentDelegate> {
 
@@ -51,6 +52,22 @@ public class MenuFragment extends DelegateBaseFragment<MenuFragmentDelegate> {
         for(MainMenu mainMenu : mainMenus){
             adapter.addMenuItem(mainMenu);
         }
+        adapter.setUserView(new UserView() {
+            @Override
+            public String userImageUrl() {
+                return "https://scontent-fra3-1.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/10372348_303014303195150_3535955851664125333_n.jpg?oh=f80d4d36d50f53ded4ede0b14e6e436d&oe=5716ABC6";
+            }
+
+            @Override
+            public String userFullName() {
+                return "Pawel Krakowiak";
+            }
+
+            @Override
+            public String userEmail() {
+                return "pawel.krakowiak.90@gmail.com";
+            }
+        });
         mainMenuList.setAdapter(adapter);
         adapter.setOnMenuItemClick(delegate::onMenuItemClick);
         adapter.notifyDataSetChanged();

@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import st.pawel.mobilnyprzewodnik.BuildConfig;
 
@@ -70,5 +71,16 @@ public class ImageLoaderProvider {
         final ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(provideDefaultImageLoaderConfigurationWithMemory(c));
         return imageLoader;
+    }
+
+    static DisplayImageOptions.Builder provideCircleDisplayImageOptionsBuilder() {
+        return new DisplayImageOptions.Builder()
+                .displayer(new RoundedBitmapDisplayer(1000))
+                .cacheInMemory(true)
+                .cacheOnDisk(true);
+    }
+
+    public static DisplayImageOptions provideCircleDisplayImageOptions(){
+        return provideCircleDisplayImageOptionsBuilder().build();
     }
 }
