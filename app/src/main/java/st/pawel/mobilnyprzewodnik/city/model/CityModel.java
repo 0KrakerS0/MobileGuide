@@ -3,6 +3,7 @@ package st.pawel.mobilnyprzewodnik.city.model;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 
 public class CityModel implements CityView {
@@ -12,15 +13,13 @@ public class CityModel implements CityView {
         String CITY_IMAGE = "cityImage";
     }
 
+    @Setter
     @SerializedName(Metadata.CITY_NAME)
     String cityName;
 
+    @Setter
     @SerializedName(Metadata.CITY_IMAGE)
     String cityUrl;
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
 
     @Override
     public String cityImageUrl() {

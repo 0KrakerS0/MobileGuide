@@ -6,6 +6,8 @@ import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 
 public interface OnCityRequestListener {
 
+    void onCityRequestStart();
+
     void onCityRequestSuccess(List<CityView> cityViews);
 
     void onCityRequestFailure();

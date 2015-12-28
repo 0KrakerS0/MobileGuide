@@ -62,6 +62,11 @@ public class CityFragment extends DelegateBaseFragment<CityFragmentDelegate> imp
     }
 
     @Override
+    public void onCityRequestStart() {
+        cityListRefresh.setRefreshing(true);
+    }
+
+    @Override
     public void onCityRequestSuccess(List<CityView> cityViews) {
         adapter.setNewListItems(cityViews);
         adapter.notifyDataSetChanged();

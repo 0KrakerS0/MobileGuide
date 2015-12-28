@@ -1,5 +1,6 @@
 package st.pawel.mobilnyprzewodnik;
 
+import android.content.Intent;
 import android.os.Handler;
 import  android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import st.pawel.mobilnyprzewodnik.city.ui.CityActivity;
 import st.pawel.mobilnyprzewodnik.city.ui.CityFragment;
 import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
+import st.pawel.mobilnyprzewodnik.common.util.C;
 import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.main.model.MainMenu;
 import st.pawel.mobilnyprzewodnik.main.ui.MenuFragment;
@@ -159,7 +161,24 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
 
     @Override
     public void onAddCityButtonClick() {
-       startActivity(CityActivity.IntentFactory.forDisplay(this));
+       startActivityForResult(CityActivity.IntentFactory.forDisplay(this), C.RequestCode.ADD_NEW_CITY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != RESULT_OK){
+            return;
+        }
+        if(requestCode == C.RequestCode.ADD_NEW_CITY){
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+            if(fragment != null && fragment instanceof OnCityRequestListener){
+                OnCityRequestListener onCityRequestListener = (OnCityRequestListener) fragment;
+                onCityRequestListener.onCityRequestStart();
+                requestForCityList();
+                return;
+            }
+        }
     }
 
     @Override
