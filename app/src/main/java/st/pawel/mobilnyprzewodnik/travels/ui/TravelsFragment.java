@@ -48,12 +48,7 @@ public class TravelsFragment extends DelegateBaseFragment<TravelFragmentDelegate
     private void prepareTravelList() {
         mainTravelList.setLayoutManager(new LinearLayoutManager(getContext()));
         final TravelAdapter adapter = new TravelAdapter();
-        adapter.setOnTravelItemClickListener(new TravelAdapter.OnTravelItemClickListener() {
-            @Override
-            public void onTravelClick(TravelView travelView) {
-                delegate.onTravelClick(travelView);
-            }
-        });
+        adapter.setOnTravelItemClickListener(delegate::onTravelClick);
         mainTravelList.setAdapter(adapter);
         List<Travel> list = createTravelList();
         for (Travel travel : list) {

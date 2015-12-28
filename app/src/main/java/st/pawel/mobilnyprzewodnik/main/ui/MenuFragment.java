@@ -51,12 +51,7 @@ public class MenuFragment extends DelegateBaseFragment<MenuFragmentDelegate> {
             adapter.addMenuItem(mainMenu);
         }
         mainMenuList.setAdapter(adapter);
-        adapter.setOnMenuItemClick(new MenuAdapter.OnMenuItemClick() {
-            @Override
-            public void onMenuItemClick(MenuItemView menuItemView) {
-                delegate.onMenuItemClick(menuItemView);
-            }
-        });
+        adapter.setOnMenuItemClick(delegate::onMenuItemClick);
         adapter.notifyDataSetChanged();
     }
 

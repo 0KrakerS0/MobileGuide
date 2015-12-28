@@ -24,12 +24,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityViewHolder> {
     @Override
     public CityViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final CityViewHolder holder = new CityViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_city, parent, false));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCityItemClickListener.onCityItemClick(cityViews.get(holder.getAdapterPosition()));
-            }
-        });
+        holder.itemView.setOnClickListener(v -> onCityItemClickListener.onCityItemClick(cityViews.get(holder.getAdapterPosition())));
         return holder;
     }
 
@@ -58,12 +53,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityViewHolder> {
 
     public interface OnCityItemClickListener {
 
-        OnCityItemClickListener NULL = new OnCityItemClickListener() {
-            @Override
-            public void onCityItemClick(CityView cityView) {
-
-            }
-        };
+        OnCityItemClickListener NULL = cityView -> {/*Nic nie rób*/};
 
         void onCityItemClick(CityView cityView);
     }

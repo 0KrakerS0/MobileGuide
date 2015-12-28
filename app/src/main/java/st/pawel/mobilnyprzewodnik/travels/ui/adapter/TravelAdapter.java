@@ -25,12 +25,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelViewHolder> {
     @Override
     public TravelViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final TravelViewHolder holder = new TravelViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_travel, parent, false));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onTravelItemClickListener.onTravelClick(travelViews.get(holder.getAdapterPosition()));
-            }
-        });
+        holder.itemView.setOnClickListener(v -> onTravelItemClickListener.onTravelClick(travelViews.get(holder.getAdapterPosition())));
         return holder;
     }
 
@@ -56,12 +51,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelViewHolder> {
 
     public interface OnTravelItemClickListener {
 
-        OnTravelItemClickListener NULL = new OnTravelItemClickListener() {
-            @Override
-            public void onTravelClick(TravelView travelView) {
-
-            }
-        };
+        OnTravelItemClickListener NULL = travelView -> {/*Nic nie rob*/};
         void onTravelClick(TravelView travelView);
     }
 }

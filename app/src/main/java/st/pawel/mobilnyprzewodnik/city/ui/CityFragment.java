@@ -50,12 +50,7 @@ public class CityFragment extends DelegateBaseFragment<CityFragmentDelegate> imp
     private void prepareCityList() {
         cityList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CityAdapter();
-        adapter.setOnCityItemClickListener(new CityAdapter.OnCityItemClickListener() {
-            @Override
-            public void onCityItemClick(CityView cityView) {
-                delegate.onCityClick(cityView);
-            }
-        });
+        adapter.setOnCityItemClickListener(delegate::onCityClick);
         cityList.setAdapter(adapter);
         delegate.requestForCityList();
     }

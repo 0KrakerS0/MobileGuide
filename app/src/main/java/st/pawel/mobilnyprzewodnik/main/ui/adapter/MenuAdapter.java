@@ -24,12 +24,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuItemViewHolder>{
     @Override
     public MenuItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final MenuItemViewHolder holder = new MenuItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_menu_item, parent, false));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onMenuItemClick.onMenuItemClick(menuItemViews.get(holder.getAdapterPosition()));
-            }
-        });
+        holder.itemView.setOnClickListener(v -> onMenuItemClick.onMenuItemClick(menuItemViews.get(holder.getAdapterPosition())));
         return holder;
     }
 
@@ -60,12 +55,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuItemViewHolder>{
     }
 
     public interface OnMenuItemClick{
-        OnMenuItemClick NULL = new OnMenuItemClick() {
-            @Override
-            public void onMenuItemClick(MenuItemView menuItemView) {
-               /*Nic nie robi*/
-            }
-        };
+        OnMenuItemClick NULL = menuItemView -> {/*Nic nie robi*/};
 
         void onMenuItemClick(MenuItemView menuItemView);
     }

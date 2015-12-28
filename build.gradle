@@ -6,6 +6,7 @@ buildscript {
         def class_paths =[
                 'com.android.tools.build:gradle:1.5.0',
                 'com.neenbedankt.gradle.plugins:android-apt:1.8',
+                'me.tatarka:gradle-retrolambda:3.2.0',
         ]
         classpath class_paths
     }
