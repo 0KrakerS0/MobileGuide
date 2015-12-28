@@ -2,6 +2,7 @@ package st.pawel.mobilnyprzewodnik.city.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -24,6 +25,10 @@ public class CityActivity extends BaseActivity {
         setContentView(R.layout.activity_city);
         ButterKnife.bind(this);
         prepareActionBar(actionBar);
+        if(savedInstanceState != null){
+            return;
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.city_container, AddCityFragment.newInstance()).commit();
     }
 
     @Nullable
