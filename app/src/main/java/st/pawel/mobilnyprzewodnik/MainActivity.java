@@ -1,5 +1,6 @@
 package st.pawel.mobilnyprzewodnik;
 
+import android.os.Handler;
 import  android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -11,7 +12,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.google.android.gms.maps.MapFragment;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +20,7 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 import st.pawel.mobilnyprzewodnik.city.delegate.CityFragmentDelegate;
-import st.pawel.mobilnyprzewodnik.city.listener.OnCityRequestSuccessListener;
+import st.pawel.mobilnyprzewodnik.city.listener.OnCityRequestListener;
 import st.pawel.mobilnyprzewodnik.city.model.CityModel;
 import st.pawel.mobilnyprzewodnik.city.model.CityResults;
 import st.pawel.mobilnyprzewodnik.city.network.GetCityRequest;
@@ -28,14 +28,15 @@ import st.pawel.mobilnyprzewodnik.city.network.PostCityRequest;
 import st.pawel.mobilnyprzewodnik.city.ui.CityFragment;
 import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
-import st.pawel.mobilnyprzewodnik.common.ui.BaseFragment;
 import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.main.model.MainMenu;
 import st.pawel.mobilnyprzewodnik.main.ui.MenuFragment;
 import st.pawel.mobilnyprzewodnik.map.ui.MainMapFragment;
 import st.pawel.mobilnyprzewodnik.travels.delegate.TravelFragmentDelegate;
+import st.pawel.mobilnyprzewodnik.travels.listener.OnTravelsRequestListener;
 import st.pawel.mobilnyprzewodnik.travels.model.Travel;
 import st.pawel.mobilnyprzewodnik.travels.ui.TravelsFragment;
+import st.pawel.mobilnyprzewodnik.travels.ui.model.TravelView;
 
 public class MainActivity extends BaseActivity implements MenuFragmentDelegate<MainMenu>, CityFragmentDelegate<CityModel>, TravelFragmentDelegate<Travel> {
 
@@ -149,11 +150,11 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
             @Override
             public void onResponse(Response<CityResults> response, Retrofit retrofit) {
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-                if(fragment == null || !(fragment instanceof OnCityRequestSuccessListener)){
+                if(fragment == null || !(fragment instanceof OnCityRequestListener)){
                     return;
                 }
-                OnCityRequestSuccessListener listener = (OnCityRequestSuccessListener) fragment;
-                List<CityView> result = new LinkedList<CityView>();
+                OnCityRequestListener listener = (OnCityRequestListener) fragment;
+                List<CityView> result = new LinkedList<>();
                 for (CityModel city : response.body()) {
                     result.add(city);
                 }
@@ -162,8 +163,45 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
 
             @Override
             public void onFailure(Throwable t) {
-
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+                if(fragment == null || !(fragment instanceof OnCityRequestListener)){
+                    return;
+                }
+                OnCityRequestListener listener = (OnCityRequestListener) fragment;
+                listener.onCityRequestFailure();
             }
         });
+    }
+
+    @Override
+    public void requestForTravelList() {
+        new Handler().postDelayed(()->{
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+                    if(fragment == null || !(fragment instanceof OnTravelsRequestListener)){
+                        return;
+                    }
+                    OnTravelsRequestListener listener = (OnTravelsRequestListener) fragment;
+                    List<TravelView> result = new LinkedList<>();
+                    List<Travel> list= createTravelList();
+                    for(TravelView travelView : list){
+                        result.add(travelView);
+                    }
+                    listener.onTravelsRequestSuccess(result);
+                },
+                1000);
+
+    }
+    //TODO do wywalenia - tylko testowo
+    List<Travel> createTravelList() {
+        List<Travel> list = new LinkedList<>();
+        list.add(new Travel("Podróż po górach", "Zakopane", 5.0f, 12));
+        list.add(new Travel("Podróż po Krakowiak", "Krakow", 5.0f, 20));
+        list.add(new Travel("Podróż po Zamościu", "Zamość", 2.0f, 11));
+        list.add(new Travel("Podróż po Warszawie", "Warszawa", 1, 12));
+        list.add(new Travel("Podróż po Szczecinie", "Szczecin", 5.0f, 6));
+        list.add(new Travel("Podróż po Zamościu", "Zamość", 5.0f, 21));
+        list.add(new Travel("Wyjazd nad jeziora", "Mazury", 4.0f, 14));
+        list.add(new Travel("Podróż nad morze", "Gdańsk", 5.0f, 1));
+        return list;
     }
 }

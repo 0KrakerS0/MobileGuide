@@ -24,6 +24,7 @@ public class MenuFragment extends DelegateBaseFragment<MenuFragmentDelegate> {
     @Bind(R.id.main_menu_list)
     RecyclerView mainMenuList;
 
+
     public static MenuFragment newInstance() {
         MenuFragment menuFragment = new MenuFragment();
         return menuFragment;

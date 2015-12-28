@@ -4,7 +4,9 @@ import java.util.List;
 
 import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 
-public interface OnCityRequestSuccessListener {
+public interface OnCityRequestListener {
 
     void onCityRequestSuccess(List<CityView> cityViews);
+
+    void onCityRequestFailure();
 }

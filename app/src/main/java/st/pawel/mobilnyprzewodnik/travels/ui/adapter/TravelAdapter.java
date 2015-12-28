@@ -39,13 +39,13 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelViewHolder> {
         return travelViews.size();
     }
 
-    public void add(TravelView travelView){
-        travelViews.add(travelView);
-    }
-
-
     public void setOnTravelItemClickListener(OnTravelItemClickListener listener) {
         this.onTravelItemClickListener = listener!=null ? listener : OnTravelItemClickListener.NULL;
+    }
+
+    public void clearAndAddall(List<TravelView> travelViews) {
+        this.travelViews.clear();
+        this.travelViews.addAll(travelViews);
     }
 
 
