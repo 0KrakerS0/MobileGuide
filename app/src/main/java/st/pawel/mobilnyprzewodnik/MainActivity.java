@@ -202,14 +202,13 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
     //TODO do wywalenia - tylko testowo
     List<Travel> createTravelList() {
         List<Travel> list = new LinkedList<>();
-        list.add(new Travel("Podróż po górach", "Zakopane", 5.0f, 12));
-        list.add(new Travel("Podróż po Krakowiak", "Krakow", 5.0f, 20));
-        list.add(new Travel("Podróż po Zamościu", "Zamość", 2.0f, 11));
-        list.add(new Travel("Podróż po Warszawie", "Warszawa", 1, 12));
-        list.add(new Travel("Podróż po Szczecinie", "Szczecin", 5.0f, 6));
-        list.add(new Travel("Podróż po Zamościu", "Zamość", 5.0f, 21));
-        list.add(new Travel("Wyjazd nad jeziora", "Mazury", 4.0f, 14));
-        list.add(new Travel("Podróż nad morze", "Gdańsk", 5.0f, 1));
+        list.add(new Travel("https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Rysy_2.jpg/240px-Rysy_2.jpg","Podróż po górach", "Zakopane", 5.0f, 12));
+        list.add(new Travel("http://images.polskaniezwykla.pl/user/item/144398.jpg","Podróż po Krakowie", "Krakow", 5.0f, 20));
+        list.add(new Travel("https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Zamosc_rynek_ratusz.jpg/240px-Zamosc_rynek_ratusz.jpg","Podróż po Zamościu", "Zamość", 2.0f, 11));
+        list.add(new Travel("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQyVT6Tv-S58WVux4qtHOr_bAqL7Yw_rRbOHK2as-p2Y3BZ8RLe","Podróż po Warszawie", "Warszawa", 1, 12));
+        list.add(new Travel("http://www.szczecin.eu/sites/all/themes/szczecin/slideshow/1.jpg","Podróż po Szczecinie", "Szczecin", 5.0f, 6));
+        list.add(new Travel("http://www.ssm.konin.pl/sites/default/files/jezioro.jpg","Wyjazd nad jeziora", "Mazury", 4.0f, 14));
+        list.add(new Travel("http://usasa.pl/wp-content/uploads/2015/04/POL_2007_08_04_Jaroslawiec_zachodniopomorskie_02-1170x429.jpg","Podróż nad morze", "Gdańsk", 5.0f, 1));
         return list;
     }
 }

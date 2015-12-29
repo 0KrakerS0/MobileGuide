@@ -7,6 +7,8 @@ import st.pawel.mobilnyprzewodnik.travels.ui.model.TravelView;
 @AllArgsConstructor(suppressConstructorProperties=true)
 public class Travel implements TravelView {
 
+    String travelImageUrl;
+
     String name;
 
     String cityName;
@@ -33,5 +35,10 @@ public class Travel implements TravelView {
     @Override
     public int objectNumber() {
         return objectNumber;
+    }
+
+    @Override
+    public String travelImageUrl() {
+        return travelImageUrl;
     }
 }
