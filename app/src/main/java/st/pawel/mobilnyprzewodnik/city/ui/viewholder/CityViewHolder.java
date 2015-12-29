@@ -15,7 +15,7 @@ public class CityViewHolder extends RecyclerView.ViewHolder{
     @Bind(R.id.city_icon)
     ImageView cityIcon;
 
-    @Bind(R.id.city_name)
+    @Bind(R.id.travel_city_name)
     TextView cityName;
 
     public CityViewHolder(View citysView) {

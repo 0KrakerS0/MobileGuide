@@ -38,10 +38,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityViewHolder> {
         return cityViews.size();
     }
 
-    public void add(CityView cityView) {
-        cityViews.add(cityView);
-    }
-
     public void setOnCityItemClickListener(OnCityItemClickListener listener) {
         this.onCityItemClickListener = listener != null ? listener : OnCityItemClickListener.NULL;
     }

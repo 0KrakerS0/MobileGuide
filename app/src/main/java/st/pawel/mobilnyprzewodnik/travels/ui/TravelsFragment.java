@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -20,7 +19,6 @@ import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
 import st.pawel.mobilnyprzewodnik.travels.delegate.TravelFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.travels.listener.OnTravelsRequestListener;
-import st.pawel.mobilnyprzewodnik.travels.model.Travel;
 import st.pawel.mobilnyprzewodnik.travels.ui.adapter.TravelAdapter;
 import st.pawel.mobilnyprzewodnik.travels.ui.model.TravelView;
 

@@ -6,6 +6,7 @@
     <string name="main_menu_map">Mapy</string>
     <string name="main_menu_ciy_list">Lista miast</string>
     <string name="main_menu_travel_list">Lista wycieczek</string>
+    <string name="main_menu_object_list">Lista obiektów</string>
     <string name="main_menu_user_data">Dane użytkownika</string>
     <string name="main_menu_logout">Wyloguj</string>
 

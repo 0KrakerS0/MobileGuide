@@ -8,7 +8,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import butterknife.Bind;
@@ -25,7 +24,6 @@ import st.pawel.mobilnyprzewodnik.city.listener.OnCityRequestListener;
 import st.pawel.mobilnyprzewodnik.city.model.CityModel;
 import st.pawel.mobilnyprzewodnik.city.model.CityResults;
 import st.pawel.mobilnyprzewodnik.city.network.GetCityRequest;
-import st.pawel.mobilnyprzewodnik.city.network.PostCityRequest;
 import st.pawel.mobilnyprzewodnik.city.ui.CityActivity;
 import st.pawel.mobilnyprzewodnik.city.ui.CityFragment;
 import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
@@ -35,13 +33,18 @@ import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.main.model.MainMenu;
 import st.pawel.mobilnyprzewodnik.main.ui.MenuFragment;
 import st.pawel.mobilnyprzewodnik.map.ui.MainMapFragment;
+import st.pawel.mobilnyprzewodnik.object.delegate.ObjectfFragmentDelegate;
+import st.pawel.mobilnyprzewodnik.object.listener.OnObjectRequestListener;
+import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
+import st.pawel.mobilnyprzewodnik.object.ui.ObjectFragment;
+import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
 import st.pawel.mobilnyprzewodnik.travels.delegate.TravelFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.travels.listener.OnTravelsRequestListener;
-import st.pawel.mobilnyprzewodnik.travels.model.Travel;
+import st.pawel.mobilnyprzewodnik.travels.model.TravelModel;
 import st.pawel.mobilnyprzewodnik.travels.ui.TravelsFragment;
 import st.pawel.mobilnyprzewodnik.travels.ui.model.TravelView;
 
-public class MainActivity extends BaseActivity implements MenuFragmentDelegate<MainMenu>, CityFragmentDelegate<CityModel>, TravelFragmentDelegate<Travel> {
+public class MainActivity extends BaseActivity implements MenuFragmentDelegate<MainMenu>, CityFragmentDelegate<CityModel>, TravelFragmentDelegate<TravelModel>, ObjectfFragmentDelegate<ObjectModel> {
 
 
     @Bind(R.id.main_toolbar)
@@ -85,6 +88,9 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
             case TRAVEL_LIST:
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, TravelsFragment.newInstance()).commit();
                 break;
+            case OBJECTS_LIST:
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, ObjectFragment.newInstance()).commit();
+                break;
             case USER_DATA:
                 Toast.makeText(this, "Jeszcze nie działa dla " + menu.name(), Toast.LENGTH_SHORT).show();
                 break;
@@ -101,8 +107,13 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
     }
 
     @Override
-    public void onTravelClick(Travel travel) {
-        Toast.makeText(this, "Kliknales " + travel.name(), Toast.LENGTH_SHORT).show();
+    public void onTravelClick(TravelModel travelModel) {
+        Toast.makeText(this, "Kliknales " + travelModel.travelName(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onObjectClick(ObjectModel objectModel) {
+        Toast.makeText(this,"Kliknales " + objectModel.objectName(), Toast.LENGTH_SHORT).show();
     }
 //
 //    @Override
@@ -136,7 +147,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
             @Override
             public void onResponse(Response<CityResults> response, Retrofit retrofit) {
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-                if(fragment == null || !(fragment instanceof OnCityRequestListener)){
+                if (fragment == null || !(fragment instanceof OnCityRequestListener)) {
                     return;
                 }
                 OnCityRequestListener listener = (OnCityRequestListener) fragment;
@@ -150,7 +161,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
             @Override
             public void onFailure(Throwable t) {
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-                if(fragment == null || !(fragment instanceof OnCityRequestListener)){
+                if (fragment == null || !(fragment instanceof OnCityRequestListener)) {
                     return;
                 }
                 OnCityRequestListener listener = (OnCityRequestListener) fragment;
@@ -183,15 +194,15 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
 
     @Override
     public void requestForTravelList() {
-        new Handler().postDelayed(()->{
+        new Handler().postDelayed(() -> {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-                    if(fragment == null || !(fragment instanceof OnTravelsRequestListener)){
+                    if (fragment == null || !(fragment instanceof OnTravelsRequestListener)) {
                         return;
                     }
                     OnTravelsRequestListener listener = (OnTravelsRequestListener) fragment;
                     List<TravelView> result = new LinkedList<>();
-                    List<Travel> list= createTravelList();
-                    for(TravelView travelView : list){
+                    List<TravelModel> list = createTravelList();
+                    for (TravelView travelView : list) {
                         result.add(travelView);
                     }
                     listener.onTravelsRequestSuccess(result);
@@ -200,15 +211,44 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
 
     }
     //TODO do wywalenia - tylko testowo
-    List<Travel> createTravelList() {
-        List<Travel> list = new LinkedList<>();
-        list.add(new Travel("https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Rysy_2.jpg/240px-Rysy_2.jpg","Podróż po górach", "Zakopane", 5.0f, 12));
-        list.add(new Travel("http://images.polskaniezwykla.pl/user/item/144398.jpg","Podróż po Krakowie", "Krakow", 5.0f, 20));
-        list.add(new Travel("https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Zamosc_rynek_ratusz.jpg/240px-Zamosc_rynek_ratusz.jpg","Podróż po Zamościu", "Zamość", 2.0f, 11));
-        list.add(new Travel("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQyVT6Tv-S58WVux4qtHOr_bAqL7Yw_rRbOHK2as-p2Y3BZ8RLe","Podróż po Warszawie", "Warszawa", 1, 12));
-        list.add(new Travel("http://www.szczecin.eu/sites/all/themes/szczecin/slideshow/1.jpg","Podróż po Szczecinie", "Szczecin", 5.0f, 6));
-        list.add(new Travel("http://www.ssm.konin.pl/sites/default/files/jezioro.jpg","Wyjazd nad jeziora", "Mazury", 4.0f, 14));
-        list.add(new Travel("http://usasa.pl/wp-content/uploads/2015/04/POL_2007_08_04_Jaroslawiec_zachodniopomorskie_02-1170x429.jpg","Podróż nad morze", "Gdańsk", 5.0f, 1));
+    List<TravelModel> createTravelList() {
+        List<TravelModel> list = new LinkedList<>();
+        list.add(new TravelModel("https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Rysy_2.jpg/240px-Rysy_2.jpg","Podróż po górach", "Zakopane", 5.0f, 12));
+        list.add(new TravelModel("http://images.polskaniezwykla.pl/user/item/144398.jpg","Podróż po Krakowie", "Krakow", 3.5f, 20));
+        list.add(new TravelModel("https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Zamosc_rynek_ratusz.jpg/240px-Zamosc_rynek_ratusz.jpg","Podróż po Zamościu", "Zamość", 2.0f, 11));
+        list.add(new TravelModel("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQyVT6Tv-S58WVux4qtHOr_bAqL7Yw_rRbOHK2as-p2Y3BZ8RLe","Podróż po Warszawie", "Warszawa", 1.0f, 12));
+        list.add(new TravelModel("http://www.szczecin.eu/sites/all/themes/szczecin/slideshow/1.jpg","Podróż po Szczecinie", "Szczecin", 4.5f, 6));
+        list.add(new TravelModel("http://www.ssm.konin.pl/sites/default/files/jezioro.jpg","Wyjazd nad jeziora", "Mazury", 4.0f, 14));
+        list.add(new TravelModel("http://usasa.pl/wp-content/uploads/2015/04/POL_2007_08_04_Jaroslawiec_zachodniopomorskie_02-1170x429.jpg", "Podróż nad morze", "Gdańsk", 2.5f, 1));
         return list;
     }
+
+
+    @Override
+    public void requestForObjectList() {
+
+        new Handler().postDelayed(() -> {
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+                    if (fragment == null || !(fragment instanceof OnObjectRequestListener)) {
+                        return;
+                    }
+                    OnObjectRequestListener listener = (OnObjectRequestListener) fragment;
+                    List<ObjectView> result = new LinkedList<>();
+                    List<ObjectModel> list = createObjectList();
+                    for (ObjectView objectView : list) {
+                        result.add(objectView);
+                    }
+                    listener.onObjectRequestSuccess(result);
+                },
+                1000);
+    }
+    //TODO do wywalenia - tylko testowo
+    List<ObjectModel> createObjectList() {
+        List<ObjectModel> list = new LinkedList<>();
+        list.add(new ObjectModel("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcR_SnC1Srn7Xz852m23cW63taVBVqJYeHQWOZqipJmhPagtIhSq","Pomnik","Zabytki kulturowe", "Gdańsk", 2.5f));
+        list.add(new ObjectModel("https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSdPYzw9t5DeMlr495XBwLD-owa00JqEX3qi8GRNAQKKwnvPqGS","Muzeum Powstania Warszawskiego","Muzeum", "Warszawa", 5.0f));
+        list.add(new ObjectModel("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTU6fO59dfTuKDt3iw2fDDuhpJiwru5he0V-6YlUlX9VEfhlbYB", "Habiba", "Restauracja", "Lublin",4.0f));
+        return list;
+    }
+
 }

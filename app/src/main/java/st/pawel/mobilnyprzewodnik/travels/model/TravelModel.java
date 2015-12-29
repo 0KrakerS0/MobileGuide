@@ -5,21 +5,21 @@ import lombok.AllArgsConstructor;
 import st.pawel.mobilnyprzewodnik.travels.ui.model.TravelView;
 
 @AllArgsConstructor(suppressConstructorProperties=true)
-public class Travel implements TravelView {
+public class TravelModel implements TravelView {
 
     String travelImageUrl;
 
-    String name;
+    String travelName;
 
     String cityName;
 
-    float rate;
+    float travelRate;
 
     int objectNumber;
 
     @Override
-    public String name() {
-        return name;
+    public String travelName() {
+        return travelName;
     }
 
     @Override
@@ -28,8 +28,8 @@ public class Travel implements TravelView {
     }
 
     @Override
-    public float rate() {
-        return rate;
+    public float travelRate() {
+        return travelRate;
     }
 
     @Override

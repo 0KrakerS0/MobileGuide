@@ -7,8 +7,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.security.SecureRandom;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import st.pawel.mobilnyprzewodnik.R;
@@ -23,7 +21,7 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.travel_image)
     ImageView image;
 
-    @Bind(R.id.city_name)
+    @Bind(R.id.travel_city_name)
     TextView cityName;
 
     @Bind(R.id.object_number)
@@ -40,9 +38,9 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
     public void bind(TravelView travelView) {
         //TODO dla wszystkich tymczasowo ten sam rysunek
         ImageLoaderProvider.newInstance(image.getContext()).displayImage(travelView.travelImageUrl(), image);
-        travelname.setText(travelView.name());
+        travelname.setText(travelView.travelName());
         cityName.setText(travelView.cityName());
-        travelRating.setRating(travelView.rate());
+        travelRating.setRating(travelView.travelRate());
         objectNumber.setText(String.valueOf(travelView.objectNumber()));
     }
 }

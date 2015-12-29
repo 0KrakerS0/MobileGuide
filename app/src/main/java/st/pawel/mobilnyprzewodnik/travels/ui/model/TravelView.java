@@ -4,11 +4,11 @@ public interface TravelView {
 
     String travelImageUrl();
 
-    String name();
+    String travelName();
 
     String cityName();
 
-    float rate();
+    float travelRate();
 
     int objectNumber();
 }
