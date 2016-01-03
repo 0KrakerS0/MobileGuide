@@ -8,4 +8,6 @@ public interface ObjectfFragmentDelegate <OBJECT extends ObjectView> {
     void onObjectClick(OBJECT object);
 
     void requestForObjectList();
+
+    void onAddObjectButtonClick();
 }

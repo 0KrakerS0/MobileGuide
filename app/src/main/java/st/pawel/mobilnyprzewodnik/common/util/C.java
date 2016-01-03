@@ -6,5 +6,6 @@ public interface C {
     interface RequestCode {
 
         int ADD_NEW_CITY = 1000;
+
     }
 }

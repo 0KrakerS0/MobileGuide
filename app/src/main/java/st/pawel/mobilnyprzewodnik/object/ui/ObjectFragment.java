@@ -14,6 +14,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
 import st.pawel.mobilnyprzewodnik.object.delegate.ObjectfFragmentDelegate;
@@ -82,6 +83,11 @@ public class ObjectFragment extends DelegateBaseFragment<ObjectfFragmentDelegate
     public void onObjectRequestFailure() {
 
         objectListRefresh.setRefreshing(false);
+
+    }
+    @OnClick(R.id.object_list_add_object_button)
+    void onAddObjectButtonClick() {
+        delegate.onAddObjectButtonClick();
     }
 }
 

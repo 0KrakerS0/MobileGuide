@@ -36,6 +36,7 @@ import st.pawel.mobilnyprzewodnik.map.ui.MainMapFragment;
 import st.pawel.mobilnyprzewodnik.object.delegate.ObjectfFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.object.listener.OnObjectRequestListener;
 import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
+import st.pawel.mobilnyprzewodnik.object.ui.ObjectActivity;
 import st.pawel.mobilnyprzewodnik.object.ui.ObjectFragment;
 import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
 import st.pawel.mobilnyprzewodnik.travels.delegate.TravelFragmentDelegate;
@@ -176,6 +177,12 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
     }
 
     @Override
+    public void onAddObjectButtonClick() {
+        startActivity(ObjectActivity.IntentFactory.forDisplay(this));
+        //Toast.makeText(this, "Doda sie nowy item", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode != RESULT_OK){
@@ -218,7 +225,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
         list.add(new TravelModel("https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Zamosc_rynek_ratusz.jpg/240px-Zamosc_rynek_ratusz.jpg","Podróż po Zamościu", "Zamość", 2.0f, 11));
         list.add(new TravelModel("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQyVT6Tv-S58WVux4qtHOr_bAqL7Yw_rRbOHK2as-p2Y3BZ8RLe","Podróż po Warszawie", "Warszawa", 1.0f, 12));
         list.add(new TravelModel("http://www.szczecin.eu/sites/all/themes/szczecin/slideshow/1.jpg","Podróż po Szczecinie", "Szczecin", 4.5f, 6));
-        list.add(new TravelModel("http://www.ssm.konin.pl/sites/default/files/jezioro.jpg","Wyjazd nad jeziora", "Mazury", 4.0f, 14));
+        list.add(new TravelModel("http://www.ssm.konin.pl/sites/default/files/jezioro.jpg", "Wyjazd nad jeziora", "Mazury", 4.0f, 14));
         list.add(new TravelModel("http://usasa.pl/wp-content/uploads/2015/04/POL_2007_08_04_Jaroslawiec_zachodniopomorskie_02-1170x429.jpg", "Podróż nad morze", "Gdańsk", 2.5f, 1));
         return list;
     }

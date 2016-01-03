@@ -5,8 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,6 +15,9 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseFragment;
 
@@ -36,19 +38,20 @@ public class MainMapFragment extends BaseFragment {
         mapView.onCreate(savedInstanceState);
 
         GoogleMap map = mapView.getMap();
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-        map.setMyLocationEnabled(true);
-        map.addMarker(new MarkerOptions().position(new LatLng(50.9660138, 22.0427032)).title("Test"));
-        map.addPolygon(new PolygonOptions().add(new LatLng(50.9660138, 22.0427032),new LatLng(51.9660138, 21.0427032)));
-        try {
-            MapsInitializer.initialize(this.getActivity());
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        }
+    //    if (map != null) {
+            map.getUiSettings().setMyLocationButtonEnabled(false);
+            map.setMyLocationEnabled(true);
+            map.addMarker(new MarkerOptions().position(new LatLng(50.9660138, 22.0427032)).title("Test"));
+            map.addPolygon(new PolygonOptions().add(new LatLng(50.9660138, 22.0427032), new LatLng(51.9660138, 21.0427032)));
+            try {
+                MapsInitializer.initialize(this.getActivity());
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(50.9660138, 22.0427032), 10);
-        map.animateCamera(cameraUpdate);
-
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(50.9660138, 22.0427032), 10);
+            map.animateCamera(cameraUpdate);
+    //    }
         return v;
     }
 

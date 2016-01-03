@@ -33,6 +33,9 @@
         <activity
             android:name=".city.ui.CityActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".object.ui.ObjectActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 
