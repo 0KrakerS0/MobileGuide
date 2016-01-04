@@ -11,11 +11,17 @@ import android.view.MenuItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
-import st.pawel.mobilnyprzewodnik.object.ui.viewholder.AddObjectFragment;
+import st.pawel.mobilnyprzewodnik.object.delegate.ObjectAddDelegate;
+import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
+import st.pawel.mobilnyprzewodnik.object.network.PostObjectRequest;
+import st.pawel.mobilnyprzewodnik.object.ui.AddObjectFragment;
 
-public class ObjectActivity extends BaseActivity{
+public class ObjectActivity extends BaseActivity implements ObjectAddDelegate{
 
     @Bind(R.id.object_toolbar)
     Toolbar actionBar;
@@ -26,10 +32,6 @@ public class ObjectActivity extends BaseActivity{
         setContentView(R.layout.activity_object);
         ButterKnife.bind(this);
         prepareActionBar(actionBar);
-        if(savedInstanceState != null){
-            return;
-        }
-        getSupportFragmentManager().beginTransaction().replace(R.id.object_container, AddObjectFragment.newInstance()).commit();
         if(savedInstanceState != null){
             return;
         }
@@ -55,6 +57,26 @@ public class ObjectActivity extends BaseActivity{
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void addObject(ObjectModel objectModel) {
+        PostObjectRequest.instance().withObjectModel(objectModel).request().enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Response<Void> response, Retrofit retrofit) {
+                if (response.isSuccess()){
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            }
+
+
+            @Override
+            public void onFailure(Throwable t) {
+            }
+        });
+
+    }
+
     public static class IntentFactory {
         public static Intent forDisplay(Context context){
             return new Intent(context, ObjectActivity.class);

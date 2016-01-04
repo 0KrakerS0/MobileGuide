@@ -36,6 +36,8 @@ import st.pawel.mobilnyprzewodnik.map.ui.MainMapFragment;
 import st.pawel.mobilnyprzewodnik.object.delegate.ObjectfFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.object.listener.OnObjectRequestListener;
 import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
+import st.pawel.mobilnyprzewodnik.object.model.ObjectResult;
+import st.pawel.mobilnyprzewodnik.object.network.GetObjectRequest;
 import st.pawel.mobilnyprzewodnik.object.ui.ObjectActivity;
 import st.pawel.mobilnyprzewodnik.object.ui.ObjectFragment;
 import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
@@ -178,8 +180,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
 
     @Override
     public void onAddObjectButtonClick() {
-        startActivity(ObjectActivity.IntentFactory.forDisplay(this));
-        //Toast.makeText(this, "Doda sie nowy item", Toast.LENGTH_SHORT).show();
+        startActivityForResult(ObjectActivity.IntentFactory.forDisplay(this), C.RequestCode.ADD_NEW_OBJECT);
     }
 
     @Override
@@ -194,6 +195,15 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
                 OnCityRequestListener onCityRequestListener = (OnCityRequestListener) fragment;
                 onCityRequestListener.onCityRequestStart();
                 requestForCityList();
+                return;
+            }
+        }
+        if(requestCode == C.RequestCode.ADD_NEW_OBJECT){
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+            if(fragment != null && fragment instanceof OnObjectRequestListener){
+                OnObjectRequestListener onObjectRequestListener = (OnObjectRequestListener) fragment;
+                onObjectRequestListener.onObjectRequestStart();
+                requestForObjectList();
                 return;
             }
         }
@@ -233,29 +243,31 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
 
     @Override
     public void requestForObjectList() {
+        GetObjectRequest.instance().request().enqueue(new Callback<ObjectResult>() {
+            @Override
+            public void onResponse(Response<ObjectResult> response, Retrofit retrofit) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+                if (fragment == null || !(fragment instanceof OnObjectRequestListener)){
+                    return;
+                }
+                OnObjectRequestListener listener = (OnObjectRequestListener) fragment;
+                List<ObjectView> result = new LinkedList<>();
+                for (ObjectModel object : response.body()){
+                    result.add(object);
+                }
+                listener.onObjectRequestSuccess(result);
+            }
 
-        new Handler().postDelayed(() -> {
-                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-                    if (fragment == null || !(fragment instanceof OnObjectRequestListener)) {
-                        return;
-                    }
-                    OnObjectRequestListener listener = (OnObjectRequestListener) fragment;
-                    List<ObjectView> result = new LinkedList<>();
-                    List<ObjectModel> list = createObjectList();
-                    for (ObjectView objectView : list) {
-                        result.add(objectView);
-                    }
-                    listener.onObjectRequestSuccess(result);
-                },
-                1000);
-    }
-    //TODO do wywalenia - tylko testowo
-    List<ObjectModel> createObjectList() {
-        List<ObjectModel> list = new LinkedList<>();
-        list.add(new ObjectModel("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcR_SnC1Srn7Xz852m23cW63taVBVqJYeHQWOZqipJmhPagtIhSq","Pomnik","Zabytki kulturowe", "Gdańsk", 2.5f));
-        list.add(new ObjectModel("https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSdPYzw9t5DeMlr495XBwLD-owa00JqEX3qi8GRNAQKKwnvPqGS","Muzeum Powstania Warszawskiego","Muzeum", "Warszawa", 5.0f));
-        list.add(new ObjectModel("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTU6fO59dfTuKDt3iw2fDDuhpJiwru5he0V-6YlUlX9VEfhlbYB", "Habiba", "Restauracja", "Lublin",4.0f));
-        return list;
-    }
+            @Override
+            public void onFailure(Throwable t) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+                if (fragment == null || !(fragment instanceof OnCityRequestListener)){
+                    return;
+                }
+                OnObjectRequestListener listener = (OnObjectRequestListener) fragment;
+                listener.onObjectRequestFailure();
+            }
+        });
 
+    }
 }

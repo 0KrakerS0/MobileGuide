@@ -72,6 +72,11 @@ public class ObjectFragment extends DelegateBaseFragment<ObjectfFragmentDelegate
     }
 
     @Override
+    public void onObjectRequestStart() {
+        objectListRefresh.setRefreshing(true);
+    }
+
+    @Override
     public void onObjectRequestSuccess(List<ObjectView> objectViews) {
 
         objectAdapter.setNewListItems(objectViews);

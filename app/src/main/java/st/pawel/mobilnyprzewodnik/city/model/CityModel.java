@@ -2,7 +2,6 @@ package st.pawel.mobilnyprzewodnik.city.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 

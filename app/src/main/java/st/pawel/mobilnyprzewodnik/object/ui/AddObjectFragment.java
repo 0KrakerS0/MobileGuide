@@ -1,6 +1,7 @@
-package st.pawel.mobilnyprzewodnik.object.ui.viewholder;
+package st.pawel.mobilnyprzewodnik.object.ui;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,15 +13,23 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RatingBar;
 
+import java.security.SecureRandom;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseFragment;
+import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
+import st.pawel.mobilnyprzewodnik.object.delegate.ObjectAddDelegate;
+import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
 
-public class AddObjectFragment extends BaseFragment {
+public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> {
 
     @Bind(R.id.add_object_name)
     EditText objectName;
+
+    @Bind(R.id.add_object_city_name)
+    EditText objectCityName;
 
     @Bind(R.id.add_object_type)
     EditText objectType;
@@ -55,8 +64,25 @@ public class AddObjectFragment extends BaseFragment {
     public  boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_accept){
             //TODO dodanie objectModel i poszczegolnych zmiennych
+            final ObjectModel objectModel = new ObjectModel();
+            objectModel.setObjectName(objectName.getText().toString());
+            objectModel.setObjectImageUrl("http://lorempixel.com/200/400/city/" + new SecureRandom().nextInt(10) + "/");
+            objectModel.setObjectType(objectType.getText().toString());
+            objectModel.setObjectCityName(objectCityName.getText().toString());
+            objectModel.setObjectRate(String.valueOf(objectRate.getRating()));
+            delegate.addObject(objectModel);
             return true;
         }
         return  super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected boolean instanceOfDelegate(Context context) {
+        return context instanceof  ObjectAddDelegate;
+    }
+
+    @Override
+    protected String delegateClassName() {
+        return ObjectAddDelegate.class.getSimpleName();
     }
 }

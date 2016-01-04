@@ -16,5 +16,7 @@ public interface RestApi {
     interface Endpoint {
         String PREFIX_ONE_CLASSES = "/1/classes";
         String CLASSES_CITY = PREFIX_ONE_CLASSES +"/City";
+        String CLASSES_OBJECT = PREFIX_ONE_CLASSES +"/Object";
+
     }
 }

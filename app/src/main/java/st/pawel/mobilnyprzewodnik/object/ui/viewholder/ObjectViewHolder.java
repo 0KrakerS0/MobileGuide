@@ -28,7 +28,7 @@ public class ObjectViewHolder extends RecyclerView.ViewHolder {
     TextView objectType;
 
     @Bind(R.id.object_rating)
-    RatingBar objectRating;
+    TextView objectRating;
 
     public ObjectViewHolder(View itemView) {
         super(itemView);
@@ -42,6 +42,6 @@ public class ObjectViewHolder extends RecyclerView.ViewHolder {
         objectName.setText(objectView.objectName());
         objectType.setText(objectView.objectType());
         objectCityName.setText(objectView.objectCityName());
-        objectRating.setRating(objectView.objectRate());
+        objectRating.setText(objectView.objectRate());
     }
 }

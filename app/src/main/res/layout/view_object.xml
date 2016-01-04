@@ -41,11 +41,10 @@
             android:layout_height="wrap_content"
             android:text="Nazwa Miasta" />
 
-        <RatingBar
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleX="0.35"
-            android:scaleY="0.35"
+            android:text="Ocena Obiektu"
             android:id="@+id/object_rating" />
     </LinearLayout>
 </LinearLayout>

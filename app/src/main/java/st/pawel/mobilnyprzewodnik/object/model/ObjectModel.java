@@ -1,20 +1,47 @@
 package st.pawel.mobilnyprzewodnik.object.model;
 
+import android.widget.RatingBar;
+
+import com.google.gson.annotations.SerializedName;
+
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
 
-@AllArgsConstructor(suppressConstructorProperties = true)
+
 public class ObjectModel implements ObjectView {
 
+    private interface Metadata{
+        String OBJECT_IMAGE = "objectImage";
+
+        String OBJECT_NAME ="objectName";
+
+        String OBJECT_TYPE = "objectType";
+
+        String OBJECT_CITY_NAME = "objectCityName";
+
+        String OBJECT_RATE = "objectRate";
+    }
+
+    @Setter
+    @SerializedName(Metadata.OBJECT_IMAGE)
     String objectImageUrl;
 
+    @Setter
+    @SerializedName(Metadata.OBJECT_NAME)
     String objectName;
 
+    @Setter
+    @SerializedName(Metadata.OBJECT_TYPE)
     String objectType;
 
+    @Setter
+    @SerializedName(Metadata.OBJECT_CITY_NAME)
     String objectCityName;
 
-    float objectRate;
+    @Setter
+    @SerializedName(Metadata.OBJECT_RATE)
+    String objectRate;
 
     @Override
     public String objectImageUrl() {
@@ -37,7 +64,5 @@ public class ObjectModel implements ObjectView {
     }
 
     @Override
-    public float objectRate() {
-        return objectRate;
-    }
+    public String objectRate() { return ("Ocena: " + objectRate); }
 }

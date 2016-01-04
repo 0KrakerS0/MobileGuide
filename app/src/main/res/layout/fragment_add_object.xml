@@ -18,12 +18,18 @@
         android:id="@+id/add_object_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nazwa obiektu" />
+        android:hint="@string/add_object_name_hint" />
+
+    <EditText
+        android:id="@+id/add_object_city_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/add_object_city_name_hint" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Typ obiektu"
+        android:hint="@string/add_object_type_hint"
         android:id="@+id/add_object_type" />
 
     <RatingBar
