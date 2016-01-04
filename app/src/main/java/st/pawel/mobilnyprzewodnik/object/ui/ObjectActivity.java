@@ -13,6 +13,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
+import st.pawel.mobilnyprzewodnik.object.ui.viewholder.AddObjectFragment;
 
 public class ObjectActivity extends BaseActivity{
 
@@ -25,6 +26,14 @@ public class ObjectActivity extends BaseActivity{
         setContentView(R.layout.activity_object);
         ButterKnife.bind(this);
         prepareActionBar(actionBar);
+        if(savedInstanceState != null){
+            return;
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.object_container, AddObjectFragment.newInstance()).commit();
+        if(savedInstanceState != null){
+            return;
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.object_container, AddObjectFragment.newInstance()).commit();
     }
 
     @Nullable
