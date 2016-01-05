@@ -63,7 +63,6 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> {
     @Override
     public  boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_accept){
-            //TODO dodanie objectModel i poszczegolnych zmiennych
             final ObjectModel objectModel = new ObjectModel();
             objectModel.setObjectName(objectName.getText().toString());
             objectModel.setObjectImageUrl("http://lorempixel.com/200/400/city/" + new SecureRandom().nextInt(10) + "/");

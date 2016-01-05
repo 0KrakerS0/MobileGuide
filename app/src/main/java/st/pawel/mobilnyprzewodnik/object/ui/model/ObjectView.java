@@ -10,5 +10,5 @@ public interface ObjectView {
 
     String objectCityName();
 
-    String objectRate();
+    float objectRate();
 }

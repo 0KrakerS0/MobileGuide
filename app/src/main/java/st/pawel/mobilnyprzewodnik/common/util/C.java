@@ -7,6 +7,6 @@ public interface C {
 
         int ADD_NEW_CITY = 1000;
 
-        int ADD_NEW_OBJECT = 1000;
+        int ADD_NEW_OBJECT = 1001;
     }
 }

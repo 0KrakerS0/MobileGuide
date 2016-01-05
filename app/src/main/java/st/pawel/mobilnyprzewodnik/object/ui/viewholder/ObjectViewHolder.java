@@ -28,7 +28,7 @@ public class ObjectViewHolder extends RecyclerView.ViewHolder {
     TextView objectType;
 
     @Bind(R.id.object_rating)
-    TextView objectRating;
+    RatingBar objectRating;
 
     public ObjectViewHolder(View itemView) {
         super(itemView);
@@ -36,12 +36,10 @@ public class ObjectViewHolder extends RecyclerView.ViewHolder {
     }
     public void bind(ObjectView objectView) {
 
-        //TODO dla wszystkich tymczasowo ten sam rysunek
-
-        ImageLoaderProvider.newInstance(objecImage.getContext()).displayImage(objectView.objectImageUrl(), objecImage );
+        ImageLoaderProvider.newInstance(objecImage.getContext()).displayImage(objectView.objectImageUrl(), objecImage);
         objectName.setText(objectView.objectName());
         objectType.setText(objectView.objectType());
         objectCityName.setText(objectView.objectCityName());
-        objectRating.setText(objectView.objectRate());
+        objectRating.setRating(objectView.objectRate());
     }
 }

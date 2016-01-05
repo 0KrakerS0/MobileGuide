@@ -64,5 +64,5 @@ public class ObjectModel implements ObjectView {
     }
 
     @Override
-    public String objectRate() { return ("Ocena: " + objectRate); }
+    public float objectRate() { return Float.parseFloat((objectRate)); }
 }
