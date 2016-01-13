@@ -17,4 +17,16 @@
     <string name="add_object_name_hint">Nazwa obiektu</string>
     <string name="add_object_city_name_hint">Nazwa miasta obiektu</string>
     <string name="add_object_type_hint">Typ obiektu</string>
+    
+    <!-- marker type -->
+    <string name="marker_type_antique">Zabytek</string>
+    <string name="marker_type_museum">Muzeum</string>
+    <string name="marker_type_monument">Pomnik</string>
+    <string name="marker_type_gallery">Galeria</string>
+    <string name="marker_type_restaurant">Restauracja</string>
+    <string name="marker_type_tourist_attraction">Atrakcja turystyczna</string>
+    <string name="marker_type_cash_machine">Bankomat</string>
+    <string name="marker_type_hotel">Hotel</string>
+    <string name="marker_type_fast_food">Fast Food</string>
+    <string name="marker_type_tourist_information">Informacja turystyczna</string>
 </resources>
