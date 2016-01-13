@@ -1,26 +1,29 @@
 package st.pawel.mobilnyprzewodnik.object.model;
 
-import android.widget.RatingBar;
-
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
-
-import lombok.AllArgsConstructor;
 import lombok.Setter;
+import st.pawel.mobilnyprzewodnik.map.model.MarkerType;
 import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
 
 
 public class ObjectModel implements ObjectView {
 
-    private interface Metadata{
+    private interface Metadata {
+
         String OBJECT_IMAGE = "objectImage";
 
-        String OBJECT_NAME ="objectName";
+        String OBJECT_NAME = "objectName";
 
         String OBJECT_TYPE = "objectType";
 
         String OBJECT_CITY_NAME = "objectCityName";
 
-        String OBJECT_RATE = "objectRate";
+        String OBJECT_RATE = "objectRate2";
+
+        String LATITUDE = "latitude";
+
+        String LONGITUDE = "longitude";
     }
 
     @Setter
@@ -33,7 +36,7 @@ public class ObjectModel implements ObjectView {
 
     @Setter
     @SerializedName(Metadata.OBJECT_TYPE)
-    String objectType;
+    MarkerType objectType;
 
     @Setter
     @SerializedName(Metadata.OBJECT_CITY_NAME)
@@ -41,7 +44,13 @@ public class ObjectModel implements ObjectView {
 
     @Setter
     @SerializedName(Metadata.OBJECT_RATE)
-    String objectRate;
+    float objectRate;
+
+    @SerializedName(Metadata.LATITUDE)
+    float latitude;
+
+    @SerializedName(Metadata.LONGITUDE)
+    float longitude;
 
     @Override
     public String objectImageUrl() {
@@ -53,9 +62,21 @@ public class ObjectModel implements ObjectView {
         return objectName;
     }
 
+
     @Override
-    public String objectType() {
-        return objectType;
+    public LatLng getLatLng() {
+        return new LatLng(latitude, longitude);
+    }
+
+
+    @Override
+    public int typeRes() {
+        return objectType == null ? MarkerType.UNKNOWN.getTypeNameRes() : objectType.getTypeNameRes();
+    }
+
+    @Override
+    public int markerIcon() {
+        return objectType == null ? MarkerType.UNKNOWN.getMarkerDrawable() : objectType.getMarkerDrawable();
     }
 
     @Override
@@ -64,5 +85,7 @@ public class ObjectModel implements ObjectView {
     }
 
     @Override
-    public float objectRate() { return Float.parseFloat((objectRate)); }
+    public float objectRate() {
+        return objectRate;
+    }
 }

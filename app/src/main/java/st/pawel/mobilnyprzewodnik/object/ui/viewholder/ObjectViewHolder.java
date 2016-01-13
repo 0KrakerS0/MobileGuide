@@ -38,7 +38,7 @@ public class ObjectViewHolder extends RecyclerView.ViewHolder {
 
         ImageLoaderProvider.newInstance(objecImage.getContext()).displayImage(objectView.objectImageUrl(), objecImage);
         objectName.setText(objectView.objectName());
-        objectType.setText(objectView.objectType());
+        objectType.setText(objectView.typeRes());
         objectCityName.setText(objectView.objectCityName());
         objectRating.setRating(objectView.objectRate());
     }

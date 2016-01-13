@@ -8,8 +8,6 @@ public interface MarkerView {
 
     LatLng getLatLng();
 
-    String title();
-
     @StringRes
     int typeRes();
 

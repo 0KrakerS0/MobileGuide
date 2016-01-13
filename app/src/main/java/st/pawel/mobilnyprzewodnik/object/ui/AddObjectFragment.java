@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseFragment;
 import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
+import st.pawel.mobilnyprzewodnik.map.model.MarkerType;
 import st.pawel.mobilnyprzewodnik.object.delegate.ObjectAddDelegate;
 import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
 
@@ -66,9 +67,9 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> {
             final ObjectModel objectModel = new ObjectModel();
             objectModel.setObjectName(objectName.getText().toString());
             objectModel.setObjectImageUrl("http://lorempixel.com/200/400/city/" + new SecureRandom().nextInt(10) + "/");
-            objectModel.setObjectType(objectType.getText().toString());
+            objectModel.setObjectType(MarkerType.ANTIQUE);
             objectModel.setObjectCityName(objectCityName.getText().toString());
-            objectModel.setObjectRate(String.valueOf(objectRate.getRating()));
+            objectModel.setObjectRate(objectRate.getRating());
             delegate.addObject(objectModel);
             return true;
         }

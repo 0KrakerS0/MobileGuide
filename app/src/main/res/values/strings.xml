@@ -29,4 +29,5 @@
     <string name="marker_type_hotel">Hotel</string>
     <string name="marker_type_fast_food">Fast Food</string>
     <string name="marker_type_tourist_information">Informacja turystyczna</string>
+    <string name="marker_type_unknown">Nieznany</string>
 </resources>
