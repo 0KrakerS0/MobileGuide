@@ -3,6 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_accept">Zaakceptuj</string>
 
+    <string name="no_location_provider">Włącz lokalizacje w telefonie!</string>
+
     <string name="main_menu_map">Mapy</string>
     <string name="main_menu_ciy_list">Lista miast</string>
     <string name="main_menu_travel_list">Lista wycieczek</string>
@@ -16,8 +18,9 @@
     <!-- add object -->
     <string name="add_object_name_hint">Nazwa obiektu</string>
     <string name="add_object_city_name_hint">Nazwa miasta obiektu</string>
+    <string name="add_object_location">Nazwa miasta</string>
     <string name="add_object_type_hint">Typ obiektu</string>
-    
+
     <!-- marker type -->
     <string name="marker_type_antique">Zabytek</string>
     <string name="marker_type_museum">Muzeum</string>

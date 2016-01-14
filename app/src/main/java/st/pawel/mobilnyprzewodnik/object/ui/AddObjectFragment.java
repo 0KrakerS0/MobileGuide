@@ -2,6 +2,8 @@ package st.pawel.mobilnyprzewodnik.object.ui;
 
 
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,8 +15,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.google.android.gms.maps.model.LatLng;
 import java.security.SecureRandom;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
@@ -23,7 +27,7 @@ import st.pawel.mobilnyprzewodnik.object.delegate.ObjectAddDelegate;
 import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
 import st.pawel.mobilnyprzewodnik.object.ui.adapter.ObjectTypeSpinnerAdapter;
 
-public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> {
+public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> implements LocationListener {
 
     @Bind(R.id.add_object_name)
     EditText objectName;
@@ -31,11 +35,16 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> {
     @Bind(R.id.add_object_city_name)
     EditText objectCityName;
 
+    @Bind(R.id.add_object_location)
+    TextView objectLocation;
+
     @Bind(R.id.add_object_type)
     Spinner objectType;
 
     @Bind(R.id.add_object_rate)
     RatingBar objectRate;
+
+    private final StringBuilder sb = new StringBuilder();
 
     public static AddObjectFragment newInstance() {
         AddObjectFragment fragment = new AddObjectFragment();
@@ -53,7 +62,16 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> {
         View result = inflater.inflate(R.layout.fragment_add_object, container, false);
         ButterKnife.bind(this, result);
         prepareObjectTypeSpinner();
+        prepareObjectLocationText();
         return result;
+    }
+
+    private void prepareObjectLocationText(){
+        LatLng latLong = delegate.requestForLastKnownPosition();
+        if(latLong == null){
+           return;
+        }
+        objectLocation.setText(locationText(latLong.latitude, latLong.longitude));
     }
 
     private void prepareObjectTypeSpinner() {
@@ -82,9 +100,12 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> {
             objectModel.setObjectType((MarkerType) objectType.getSelectedItem());
             objectModel.setObjectCityName(objectCityName.getText().toString());
             objectModel.setObjectRate(objectRate.getRating());
-            //TODO tymczasowe wartosci
-            objectModel.setLatitude(51.96);
-            objectModel.setLongitude(22.14);
+            String location = objectLocation.getText().toString();
+            if(!location.isEmpty()){
+                String[] locationArray = location.split(";");
+                objectModel.setLatitude(Double.parseDouble(locationArray[0]));
+                objectModel.setLongitude(Double.parseDouble(locationArray[1]));
+            }
             delegate.addObject(objectModel);
             return true;
         }
@@ -99,5 +120,33 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> {
     @Override
     protected String delegateClassName() {
         return ObjectAddDelegate.class.getSimpleName();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if(location == null){
+            return;
+        }
+        objectLocation.setText(locationText(location.getLatitude(), location.getLongitude()));
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        //nic nie rób
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        //nic nie rób
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        //nic nie rób
+    }
+
+    private String locationText(double latitude, double longitude){
+        sb.setLength(0);
+        return sb.append(latitude).append(";").append(longitude).toString();
     }
 }
