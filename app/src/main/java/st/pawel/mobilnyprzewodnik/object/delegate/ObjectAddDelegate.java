@@ -9,4 +9,6 @@ public interface ObjectAddDelegate {
     LatLng requestForLastKnownPosition();
 
     void requestForLocationFromMap(LatLng latLng);
+
+    void requestForTakePhoto();
 }

@@ -6,31 +6,41 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import java.io.File;
+import java.io.IOException;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
+import st.pawel.mobilnyprzewodnik.common.util.C;
 import st.pawel.mobilnyprzewodnik.common.util.LocationProvider;
 import st.pawel.mobilnyprzewodnik.object.delegate.ObjectAddDelegate;
 import st.pawel.mobilnyprzewodnik.object.listener.OnLocationRequestListener;
+import st.pawel.mobilnyprzewodnik.object.listener.OnPhotoTakenListener;
 import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
 import st.pawel.mobilnyprzewodnik.object.network.PostObjectRequest;
 
 public class ObjectActivity extends BaseActivity implements ObjectAddDelegate, LocationListener, GoogleMap.OnMapClickListener {
 
     private static final String MAP_TAG = "MAP_TAG";
+
+    private static final String FILE_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/temp.png";
 
     @Bind(R.id.object_toolbar)
     Toolbar actionBar;
@@ -126,6 +136,36 @@ public class ObjectActivity extends BaseActivity implements ObjectAddDelegate, L
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.object_container);
         if (fragment != null && fragment instanceof OnLocationRequestListener) {
             ((OnLocationRequestListener) fragment).onLocationRequestSuccess(latLng);
+        }
+    }
+
+    @Override
+    public void requestForTakePhoto() {
+        File newfile = new File(FILE_PATH);
+        try {
+            if (!newfile.exists()) {
+                newfile.createNewFile();
+            }
+        } catch (IOException e) {
+            Log.e(ObjectActivity.class.getSimpleName(), e.getMessage());
+        }
+        Uri outputFileUri = Uri.fromFile(newfile);
+        final Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        startActivityForResult(cameraIntent, C.RequestCode.TAKE_A_PHOTO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        if (requestCode == C.RequestCode.TAKE_A_PHOTO) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.object_container);
+            if (fragment != null && fragment instanceof OnPhotoTakenListener) {
+                ((OnPhotoTakenListener) fragment).onPhotoTaken(FILE_PATH);
+            }
         }
     }
 
