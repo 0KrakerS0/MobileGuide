@@ -34,12 +34,12 @@ public class DialogMapFragment extends DialogFragment implements GoogleMap.OnMap
 
     public static DialogMapFragment newInstance(LatLng latLng) {
         final DialogMapFragment dialogMapFragment = new DialogMapFragment();
+        Bundle args = new Bundle();
         if (latLng != null) {
-            Bundle args = new Bundle();
             args.putDouble(LATITUDE_ARG, latLng.latitude);
             args.putDouble(LONGITUDE_ARG, latLng.longitude);
-            dialogMapFragment.setArguments(args);
         }
+        dialogMapFragment.setArguments(args);
         return dialogMapFragment;
     }
 

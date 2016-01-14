@@ -94,8 +94,8 @@ public class ObjectActivity extends BaseActivity implements ObjectAddDelegate, L
         if (!locationManager.isProviderEnabled()) {
             Toast.makeText(this, R.string.no_location_provider, Toast.LENGTH_SHORT).show();
         }
-        final Location lastKnownBestLocation = locationManager.getLastKnownBestLocation();
-        locationManager.requestLocation(this);
+        final Location lastKnownBestLocation = locationManager.getLastKnownBestLocation(this);
+        locationManager.requestLocation(this, this);
         if (lastKnownBestLocation == null) {
             return null;
         }
@@ -116,7 +116,7 @@ public class ObjectActivity extends BaseActivity implements ObjectAddDelegate, L
 
     @Override
     public void requestForLocationFromMap(LatLng latLng) {
-        locationManager.removeUpdates(this);
+        locationManager.removeUpdates(this, this);
         final DialogMapFragment dialogMapFragment = DialogMapFragment.newInstance(latLng);
         dialogMapFragment.show(getSupportFragmentManager(), MAP_TAG);
     }
