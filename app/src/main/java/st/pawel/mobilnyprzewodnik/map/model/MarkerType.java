@@ -10,7 +10,6 @@ import st.pawel.mobilnyprzewodnik.R;
 @AllArgsConstructor(suppressConstructorProperties = true)
 public enum MarkerType implements MarkerView {
 
-    //TODO Dodac wlasciwe resource dla ikonek
     @SerializedName(Metadata.ANTIQUE)
     ANTIQUE(R.drawable.ic_antique, R.string.marker_type_antique),
     @SerializedName(Metadata.MUSEUM)
@@ -24,7 +23,7 @@ public enum MarkerType implements MarkerView {
     @SerializedName(Metadata.TOURIST_ATTRACTION)
     TOURIST_ATTRACTION(R.drawable.ic_turistic_attraction, R.string.marker_type_tourist_attraction),
     @SerializedName(Metadata.HOTEL)
-    HOTEL(R.drawable.ic_hotel, R.string.marker_type_museum),
+    HOTEL(R.drawable.ic_hotel, R.string.marker_type_hotel),
     @SerializedName(Metadata.CASH_MACHINE)
     CASH_MACHINE(R.drawable.ic_cash_machine, R.string.marker_type_cash_machine),
     @SerializedName(Metadata.FAST_FOOD)
