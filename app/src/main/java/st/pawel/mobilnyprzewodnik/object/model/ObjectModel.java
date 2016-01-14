@@ -46,11 +46,13 @@ public class ObjectModel implements ObjectView {
     @SerializedName(Metadata.OBJECT_RATE)
     float objectRate;
 
+    @Setter
     @SerializedName(Metadata.LATITUDE)
-    float latitude;
+    double latitude;
 
+    @Setter
     @SerializedName(Metadata.LONGITUDE)
-    float longitude;
+    double longitude;
 
     @Override
     public String objectImageUrl() {
@@ -71,12 +73,12 @@ public class ObjectModel implements ObjectView {
 
     @Override
     public int typeRes() {
-        return objectType == null ? MarkerType.UNKNOWN.getTypeNameRes() : objectType.getTypeNameRes();
+        return objectType == null ? MarkerType.UNKNOWN.typeRes() : objectType.typeRes();
     }
 
     @Override
     public int markerIcon() {
-        return objectType == null ? MarkerType.UNKNOWN.getMarkerDrawable() : objectType.getMarkerDrawable();
+        return objectType == null ? MarkerType.UNKNOWN.markerIcon() : objectType.markerIcon();
     }
 
     @Override
