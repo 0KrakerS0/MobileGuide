@@ -27,7 +27,6 @@ public class LocationProvider {
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            bestResult = getBestLastKnownLocation(matchingProviders);
             return bestResult;
         }
         if (Build.VERSION.SDK_INT < 23) {
@@ -57,11 +56,9 @@ public class LocationProvider {
 
     public void requestLocation(Context context, LocationListener locationListener) {
         final List<String> matchingProviders = locationManager.getAllProviders();
-        for (String provider : matchingProviders) {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(provider, REQUEST_LOCATION_DURATION, 0, locationListener);
-            }
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
         if (Build.VERSION.SDK_INT < 23) {
             for (String provider : matchingProviders) {
@@ -73,7 +70,7 @@ public class LocationProvider {
     public void removeUpdates(Context context, LocationListener locationListener) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            locationManager.removeUpdates(locationListener);
+            return;
         }
         if (Build.VERSION.SDK_INT < 23) {
             locationManager.removeUpdates(locationListener);
