@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import retrofit.Callback;
 import retrofit.Response;
@@ -23,10 +24,13 @@ import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
 import st.pawel.mobilnyprzewodnik.common.util.LocationProvider;
 import st.pawel.mobilnyprzewodnik.object.delegate.ObjectAddDelegate;
+import st.pawel.mobilnyprzewodnik.object.listener.OnLocationRequestListener;
 import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
 import st.pawel.mobilnyprzewodnik.object.network.PostObjectRequest;
 
-public class ObjectActivity extends BaseActivity implements ObjectAddDelegate, LocationListener {
+public class ObjectActivity extends BaseActivity implements ObjectAddDelegate, LocationListener, GoogleMap.OnMapClickListener {
+
+    private static final String MAP_TAG = "MAP_TAG";
 
     @Bind(R.id.object_toolbar)
     Toolbar actionBar;
@@ -87,7 +91,7 @@ public class ObjectActivity extends BaseActivity implements ObjectAddDelegate, L
 
     @Override
     public LatLng requestForLastKnownPosition() {
-        if(!locationManager.isProviderEnabled()){
+        if (!locationManager.isProviderEnabled()) {
             Toast.makeText(this, R.string.no_location_provider, Toast.LENGTH_SHORT).show();
         }
         final Location lastKnownBestLocation = locationManager.getLastKnownBestLocation();
@@ -107,9 +111,21 @@ public class ObjectActivity extends BaseActivity implements ObjectAddDelegate, L
 
     @Override
     public void onLocationChanged(Location location) {
+        onMapClick(new LatLng(location.getLatitude(), location.getLongitude()));
+    }
+
+    @Override
+    public void requestForLocationFromMap(LatLng latLng) {
+        locationManager.removeUpdates(this);
+        final DialogMapFragment dialogMapFragment = DialogMapFragment.newInstance(latLng);
+        dialogMapFragment.show(getSupportFragmentManager(), MAP_TAG);
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.object_container);
-        if (fragment != null && fragment instanceof LocationListener) {
-            ((LocationListener) fragment).onLocationChanged(location);
+        if (fragment != null && fragment instanceof OnLocationRequestListener) {
+            ((OnLocationRequestListener) fragment).onLocationRequestSuccess(latLng);
         }
     }
 

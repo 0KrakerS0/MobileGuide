@@ -7,4 +7,6 @@ public interface ObjectAddDelegate {
     void addObject(ObjectModel objectModel);
 
     LatLng requestForLastKnownPosition();
+
+    void requestForLocationFromMap(LatLng latLng);
 }

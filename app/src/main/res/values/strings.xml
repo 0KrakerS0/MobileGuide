@@ -20,6 +20,7 @@
     <string name="add_object_city_name_hint">Nazwa miasta obiektu</string>
     <string name="add_object_location">Nazwa miasta</string>
     <string name="add_object_type_hint">Typ obiektu</string>
+    <string name="add_object_map_dialog_title">Wybierz pozycję na mapie</string>
 
     <!-- marker type -->
     <string name="marker_type_antique">Zabytek</string>

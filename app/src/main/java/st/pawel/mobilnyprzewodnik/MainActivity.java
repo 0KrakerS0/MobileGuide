@@ -261,7 +261,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
             @Override
             public void onFailure(Throwable t) {
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-                if (fragment == null || !(fragment instanceof OnCityRequestListener)){
+                if (fragment == null || !(fragment instanceof OnObjectRequestListener)){
                     return;
                 }
                 OnObjectRequestListener listener = (OnObjectRequestListener) fragment;

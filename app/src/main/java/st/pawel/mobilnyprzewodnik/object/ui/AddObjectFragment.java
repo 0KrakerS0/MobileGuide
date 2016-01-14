@@ -2,8 +2,6 @@ package st.pawel.mobilnyprzewodnik.object.ui;
 
 
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,16 +16,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.google.android.gms.maps.model.LatLng;
 import java.security.SecureRandom;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
 import st.pawel.mobilnyprzewodnik.map.model.MarkerType;
 import st.pawel.mobilnyprzewodnik.object.delegate.ObjectAddDelegate;
+import st.pawel.mobilnyprzewodnik.object.listener.OnLocationRequestListener;
 import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
 import st.pawel.mobilnyprzewodnik.object.ui.adapter.ObjectTypeSpinnerAdapter;
 
-public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> implements LocationListener {
+public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> implements OnLocationRequestListener {
+
+    private static final String LAT_LONG_SEPARATOR = ";";
 
     @Bind(R.id.add_object_name)
     EditText objectName;
@@ -62,14 +64,16 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
         View result = inflater.inflate(R.layout.fragment_add_object, container, false);
         ButterKnife.bind(this, result);
         prepareObjectTypeSpinner();
-        prepareObjectLocationText();
+        if (savedInstanceState == null) {
+            prepareObjectLocationText();
+        }
         return result;
     }
 
-    private void prepareObjectLocationText(){
+    private void prepareObjectLocationText() {
         LatLng latLong = delegate.requestForLastKnownPosition();
-        if(latLong == null){
-           return;
+        if (latLong == null) {
+            return;
         }
         objectLocation.setText(locationText(latLong.latitude, latLong.longitude));
     }
@@ -101,8 +105,8 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
             objectModel.setObjectCityName(objectCityName.getText().toString());
             objectModel.setObjectRate(objectRate.getRating());
             String location = objectLocation.getText().toString();
-            if(!location.isEmpty()){
-                String[] locationArray = location.split(";");
+            if (!location.isEmpty()) {
+                String[] locationArray = location.split(LAT_LONG_SEPARATOR);
                 objectModel.setLatitude(Double.parseDouble(locationArray[0]));
                 objectModel.setLongitude(Double.parseDouble(locationArray[1]));
             }
@@ -110,6 +114,17 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.add_object_location)
+    void onLocationClick() {
+        String location = objectLocation.getText().toString();
+        if (location.isEmpty()) {
+            delegate.requestForLocationFromMap(null);
+            return;
+        }
+        String[] locationArray = location.split(LAT_LONG_SEPARATOR);
+        delegate.requestForLocationFromMap(new LatLng(Double.parseDouble(locationArray[0]), Double.parseDouble(locationArray[1])));
     }
 
     @Override
@@ -123,30 +138,14 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        if(location == null){
-            return;
-        }
-        objectLocation.setText(locationText(location.getLatitude(), location.getLongitude()));
+    public void onLocationRequestSuccess(LatLng latLng) {
+        objectLocation.setText(locationText(latLng.latitude, latLng.longitude));
     }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        //nic nie rób
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        //nic nie rób
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        //nic nie rób
-    }
-
-    private String locationText(double latitude, double longitude){
+    private String locationText(double latitude, double longitude) {
         sb.setLength(0);
-        return sb.append(latitude).append(";").append(longitude).toString();
+        sb.append(latitude).setLength(9);
+        sb.append(LAT_LONG_SEPARATOR).append(longitude).setLength(19);
+        return sb.toString();
     }
 }

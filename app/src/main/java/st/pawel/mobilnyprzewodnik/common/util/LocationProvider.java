@@ -9,7 +9,7 @@ public class LocationProvider {
 
     private final LocationManager locationManager;
 
-    private long REQUEST_LOCATION_DURATION = 3000l;
+    private static final long REQUEST_LOCATION_DURATION = 3000l;
 
     public LocationProvider(LocationManager locationManager) {
         this.locationManager = locationManager;
@@ -44,6 +44,10 @@ public class LocationProvider {
         }
     }
 
+    @SuppressWarnings("ResourceType")
+    public void removeUpdates(LocationListener locationListener){
+        locationManager.removeUpdates(locationListener);
+    }
     public boolean isProviderEnabled() {
         final List<String> matchingProviders = locationManager.getAllProviders();
         for (final String provider : matchingProviders) {
