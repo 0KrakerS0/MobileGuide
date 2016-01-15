@@ -9,20 +9,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import java.util.LinkedList;
+import java.util.List;
+import org.parceler.Parcels;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
 import st.pawel.mobilnyprzewodnik.object.delegate.ObjectfFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.object.listener.OnObjectRequestListener;
+import st.pawel.mobilnyprzewodnik.object.model.ObjectResult;
 import st.pawel.mobilnyprzewodnik.object.ui.adapter.ObjectAdapter;
 import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
 
-public class ObjectFragment extends DelegateBaseFragment<ObjectfFragmentDelegate> implements OnObjectRequestListener{
+public class ObjectFragment extends DelegateBaseFragment<ObjectfFragmentDelegate> implements OnObjectRequestListener {
+
+    private static final String OBJECT_RESULT = "OBJECT_RESULT";
 
     @Bind(R.id.main_object_list)
     RecyclerView mainObjectList;
@@ -30,6 +33,7 @@ public class ObjectFragment extends DelegateBaseFragment<ObjectfFragmentDelegate
     @Bind(R.id.object_list_refresh)
     SwipeRefreshLayout objectListRefresh;
 
+    ObjectResult objectResult;
 
     ObjectAdapter objectAdapter;
 
@@ -37,6 +41,7 @@ public class ObjectFragment extends DelegateBaseFragment<ObjectfFragmentDelegate
         ObjectFragment objectFragment = new ObjectFragment();
         return objectFragment;
     }
+
     @Override
     protected boolean instanceOfDelegate(Context context) {
         return context instanceof ObjectfFragmentDelegate;
@@ -60,7 +65,20 @@ public class ObjectFragment extends DelegateBaseFragment<ObjectfFragmentDelegate
         super.onViewCreated(view, savedInstanceState);
         prepareObjectList();
         objectListRefresh.setOnRefreshListener(delegate::requestForObjectList);
-        objectListRefresh.post(() -> objectListRefresh.setRefreshing(true));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(OBJECT_RESULT, Parcels.wrap(objectResult));
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@Nullable Bundle saveInstanceState) {
+        if (saveInstanceState == null) {
+            return;
+        }
+        objectResult = Parcels.unwrap(saveInstanceState.getParcelable(OBJECT_RESULT));
     }
 
     private void prepareObjectList() {
@@ -68,7 +86,12 @@ public class ObjectFragment extends DelegateBaseFragment<ObjectfFragmentDelegate
         objectAdapter = new ObjectAdapter();
         objectAdapter.setOnObjectItemClickListener(delegate::onObjectClick);
         mainObjectList.setAdapter(objectAdapter);
-        delegate.requestForObjectList();
+        if (objectResult == null) {
+            objectListRefresh.post(() -> objectListRefresh.setRefreshing(true));
+            delegate.requestForObjectList();
+            return;
+        }
+        onObjectRequestSuccess(objectResult);
     }
 
     @Override
@@ -77,8 +100,12 @@ public class ObjectFragment extends DelegateBaseFragment<ObjectfFragmentDelegate
     }
 
     @Override
-    public void onObjectRequestSuccess(List<ObjectView> objectViews) {
-
+    public void onObjectRequestSuccess(ObjectResult objectResult) {
+        this.objectResult = objectResult;
+        List<ObjectView> objectViews = new LinkedList<>();
+        for (ObjectView object : objectResult) {
+            objectViews.add(object);
+        }
         objectAdapter.setNewListItems(objectViews);
         objectAdapter.notifyDataSetChanged();
         objectListRefresh.setRefreshing(false);
@@ -90,6 +117,7 @@ public class ObjectFragment extends DelegateBaseFragment<ObjectfFragmentDelegate
         objectListRefresh.setRefreshing(false);
 
     }
+
     @OnClick(R.id.object_list_add_object_button)
     void onAddObjectButtonClick() {
         delegate.onAddObjectButtonClick();

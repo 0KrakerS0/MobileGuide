@@ -3,10 +3,12 @@ package st.pawel.mobilnyprzewodnik.object.model;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 import lombok.Setter;
+import org.parceler.Parcel;
 import st.pawel.mobilnyprzewodnik.map.model.MarkerType;
 import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
 
 
+@Parcel
 public class ObjectModel implements ObjectView {
 
     private interface Metadata {

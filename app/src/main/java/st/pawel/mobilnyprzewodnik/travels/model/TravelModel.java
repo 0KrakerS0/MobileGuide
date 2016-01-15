@@ -2,8 +2,10 @@ package st.pawel.mobilnyprzewodnik.travels.model;
 
 
 import lombok.AllArgsConstructor;
+import org.parceler.Parcel;
 import st.pawel.mobilnyprzewodnik.travels.ui.model.TravelView;
 
+@Parcel
 @AllArgsConstructor(suppressConstructorProperties=true)
 public class TravelModel implements TravelView {
 
@@ -16,6 +18,10 @@ public class TravelModel implements TravelView {
     float travelRate;
 
     int objectNumber;
+
+    public TravelModel(){
+
+    }
 
     @Override
     public String travelName() {

@@ -1,14 +1,12 @@
 package st.pawel.mobilnyprzewodnik.city.listener;
 
-import java.util.List;
-
-import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
+import st.pawel.mobilnyprzewodnik.city.model.CityResults;
 
 public interface OnCityRequestListener {
 
     void onCityRequestStart();
 
-    void onCityRequestSuccess(List<CityView> cityViews);
+    void onCityRequestSuccess(CityResults cityViews);
 
     void onCityRequestFailure();
 }

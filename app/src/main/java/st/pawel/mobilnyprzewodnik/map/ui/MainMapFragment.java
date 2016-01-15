@@ -18,17 +18,22 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
-import java.util.List;
+import org.parceler.Parcels;
 import st.pawel.mobilnyprzewodnik.R;
 import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
 import st.pawel.mobilnyprzewodnik.object.delegate.ObjectfFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.object.listener.OnObjectRequestListener;
+import st.pawel.mobilnyprzewodnik.object.model.ObjectResult;
 import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
 
 public class MainMapFragment extends DelegateBaseFragment<ObjectfFragmentDelegate> implements OnObjectRequestListener {
 
+    private static final String OBJECT_RESULT = "OBJECT_RESULT";
+
     @Bind(R.id.map_map)
     MapView mapView;
+
+    ObjectResult objectResult;
 
     public static MainMapFragment newInstance() {
         return new MainMapFragment();
@@ -49,6 +54,11 @@ public class MainMapFragment extends DelegateBaseFragment<ObjectfFragmentDelegat
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_map, container, false);
         ButterKnife.bind(this, v);
+        if (savedInstanceState != null) {
+            //To jest wyjątkowa sytuacja bo mapView nie radzi sobie z Parcel z Parcelera
+            objectResult = Parcels.unwrap(savedInstanceState.getParcelable(OBJECT_RESULT));
+            savedInstanceState.remove(OBJECT_RESULT);
+        }
         mapView.onCreate(savedInstanceState);
 
         final GoogleMap map = mapView.getMap();
@@ -69,8 +79,20 @@ public class MainMapFragment extends DelegateBaseFragment<ObjectfFragmentDelegat
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        delegate.requestForObjectList();
+        if (objectResult == null) {
+            delegate.requestForObjectList();
+            return;
+        }
+        onObjectRequestSuccess(objectResult);
+
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(OBJECT_RESULT, Parcels.wrap(objectResult));
+        super.onSaveInstanceState(outState);
+    }
+
 
     @Override
     public void onObjectRequestStart() {
@@ -78,9 +100,10 @@ public class MainMapFragment extends DelegateBaseFragment<ObjectfFragmentDelegat
     }
 
     @Override
-    public void onObjectRequestSuccess(List<ObjectView> objectViews) {
+    public void onObjectRequestSuccess(ObjectResult objectResult) {
+        this.objectResult = objectResult;
         final GoogleMap map = mapView.getMap();
-        for (ObjectView objectView : objectViews) {
+        for (ObjectView objectView : objectResult) {
             map.addMarker(new MarkerOptions()
                             .position(objectView.getLatLng())
                             .title(objectView.objectName() + " " + getString(objectView.typeRes()))

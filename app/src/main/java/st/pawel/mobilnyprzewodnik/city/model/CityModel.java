@@ -3,8 +3,10 @@ package st.pawel.mobilnyprzewodnik.city.model;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Setter;
+import org.parceler.Parcel;
 import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 
+@Parcel
 public class CityModel implements CityView {
 
     private interface Metadata {

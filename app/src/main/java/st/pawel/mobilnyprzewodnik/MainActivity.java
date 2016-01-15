@@ -26,7 +26,6 @@ import st.pawel.mobilnyprzewodnik.city.model.CityResults;
 import st.pawel.mobilnyprzewodnik.city.network.GetCityRequest;
 import st.pawel.mobilnyprzewodnik.city.ui.CityActivity;
 import st.pawel.mobilnyprzewodnik.city.ui.CityFragment;
-import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
 import st.pawel.mobilnyprzewodnik.common.util.C;
 import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
@@ -48,7 +47,6 @@ import st.pawel.mobilnyprzewodnik.travels.ui.TravelsFragment;
 import st.pawel.mobilnyprzewodnik.travels.ui.model.TravelView;
 
 public class MainActivity extends BaseActivity implements MenuFragmentDelegate<MainMenu>, CityFragmentDelegate<CityModel>, TravelFragmentDelegate<TravelModel>, ObjectfFragmentDelegate<ObjectModel> {
-
 
     @Bind(R.id.main_toolbar)
     Toolbar mainActionBar;
@@ -118,12 +116,6 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
     public void onObjectClick(ObjectModel objectModel) {
         Toast.makeText(this,"Kliknales " + objectModel.objectName(), Toast.LENGTH_SHORT).show();
     }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -154,11 +146,9 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
                     return;
                 }
                 OnCityRequestListener listener = (OnCityRequestListener) fragment;
-                List<CityView> result = new LinkedList<>();
-                for (CityModel city : response.body()) {
-                    result.add(city);
-                }
-                listener.onCityRequestSuccess(result);
+
+                listener.onCityRequestSuccess(response.body());
+
             }
 
             @Override
@@ -251,11 +241,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
                     return;
                 }
                 OnObjectRequestListener listener = (OnObjectRequestListener) fragment;
-                List<ObjectView> result = new LinkedList<>();
-                for (ObjectModel object : response.body()){
-                    result.add(object);
-                }
-                listener.onObjectRequestSuccess(result);
+                listener.onObjectRequestSuccess(response.body());
             }
 
             @Override

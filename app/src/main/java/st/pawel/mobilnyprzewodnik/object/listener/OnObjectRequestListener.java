@@ -1,14 +1,12 @@
 package st.pawel.mobilnyprzewodnik.object.listener;
 
-import java.util.List;
-
-import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
+import st.pawel.mobilnyprzewodnik.object.model.ObjectResult;
 
 public interface OnObjectRequestListener {
 
     void onObjectRequestStart();
 
-    void onObjectRequestSuccess(List<ObjectView> objectViews);
+    void onObjectRequestSuccess(ObjectResult objectResult);
 
     void onObjectRequestFailure();
 }

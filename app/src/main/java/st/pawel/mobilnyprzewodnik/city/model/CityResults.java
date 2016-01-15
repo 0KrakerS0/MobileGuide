@@ -4,8 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Iterator;
 import java.util.List;
+import org.parceler.Parcel;
 
-
+@Parcel
 public class CityResults implements Iterable<CityModel> {
 
     private static final Iterator<CityModel> EMPTY = new Iterator<CityModel>() {

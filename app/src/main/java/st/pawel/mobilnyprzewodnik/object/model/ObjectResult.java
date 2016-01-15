@@ -4,7 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Iterator;
 import java.util.List;
+import org.parceler.Parcel;
 
+@Parcel
 public class ObjectResult implements Iterable<ObjectModel> {
 
     private static final Iterator<ObjectModel> EMPTY = new Iterator<ObjectModel>() {
