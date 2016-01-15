@@ -43,7 +43,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelViewHolder> {
         this.onTravelItemClickListener = listener!=null ? listener : OnTravelItemClickListener.NULL;
     }
 
-    public void clearAndAddall(List<TravelView> travelViews) {
+    public void clearAndAddAll(List<TravelView> travelViews) {
         this.travelViews.clear();
         this.travelViews.addAll(travelViews);
     }

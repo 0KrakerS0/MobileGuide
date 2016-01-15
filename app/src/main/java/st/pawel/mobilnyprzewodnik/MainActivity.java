@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import java.util.LinkedList;
 import java.util.List;
 
+import junit.framework.TestResult;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -43,6 +44,8 @@ import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
 import st.pawel.mobilnyprzewodnik.travels.delegate.TravelFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.travels.listener.OnTravelsRequestListener;
 import st.pawel.mobilnyprzewodnik.travels.model.TravelModel;
+import st.pawel.mobilnyprzewodnik.travels.model.TravelResult;
+import st.pawel.mobilnyprzewodnik.travels.network.GetTravelRequest;
 import st.pawel.mobilnyprzewodnik.travels.ui.TravelsFragment;
 import st.pawel.mobilnyprzewodnik.travels.ui.model.TravelView;
 
@@ -201,35 +204,28 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
 
     @Override
     public void requestForTravelList() {
-        new Handler().postDelayed(() -> {
-                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-                    if (fragment == null || !(fragment instanceof OnTravelsRequestListener)) {
-                        return;
-                    }
-                    OnTravelsRequestListener listener = (OnTravelsRequestListener) fragment;
-                    List<TravelView> result = new LinkedList<>();
-                    List<TravelModel> list = createTravelList();
-                    for (TravelView travelView : list) {
-                        result.add(travelView);
-                    }
-                    listener.onTravelsRequestSuccess(result);
-                },
-                1000);
+        GetTravelRequest.instance().request().enqueue(new Callback<TravelResult>() {
+            @Override
+            public void onResponse(Response<TravelResult> response, Retrofit retrofit) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+                if (fragment == null || !(fragment instanceof OnTravelsRequestListener)) {
+                    return;
+                }
+                OnTravelsRequestListener listener = (OnTravelsRequestListener) fragment;
+                listener.onTravelsRequestSuccess(response.body());
+            }
 
+            @Override
+            public void onFailure(Throwable t) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+                if (fragment == null || !(fragment instanceof OnTravelsRequestListener)) {
+                    return;
+                }
+                OnTravelsRequestListener listener = (OnTravelsRequestListener) fragment;
+                listener.onTravelsRequestFailure();
+            }
+        });
     }
-    //TODO do wywalenia - tylko testowo
-    List<TravelModel> createTravelList() {
-        List<TravelModel> list = new LinkedList<>();
-        list.add(new TravelModel("https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Rysy_2.jpg/240px-Rysy_2.jpg","Podróż po górach", "Zakopane", 5.0f, 12));
-        list.add(new TravelModel("http://images.polskaniezwykla.pl/user/item/144398.jpg","Podróż po Krakowie", "Krakow", 3.5f, 20));
-        list.add(new TravelModel("https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Zamosc_rynek_ratusz.jpg/240px-Zamosc_rynek_ratusz.jpg","Podróż po Zamościu", "Zamość", 2.0f, 11));
-        list.add(new TravelModel("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQyVT6Tv-S58WVux4qtHOr_bAqL7Yw_rRbOHK2as-p2Y3BZ8RLe","Podróż po Warszawie", "Warszawa", 1.0f, 12));
-        list.add(new TravelModel("http://www.szczecin.eu/sites/all/themes/szczecin/slideshow/1.jpg","Podróż po Szczecinie", "Szczecin", 4.5f, 6));
-        list.add(new TravelModel("http://www.ssm.konin.pl/sites/default/files/jezioro.jpg", "Wyjazd nad jeziora", "Mazury", 4.0f, 14));
-        list.add(new TravelModel("http://usasa.pl/wp-content/uploads/2015/04/POL_2007_08_04_Jaroslawiec_zachodniopomorskie_02-1170x429.jpg", "Podróż nad morze", "Gdańsk", 2.5f, 1));
-        return list;
-    }
-
 
     @Override
     public void requestForObjectList() {

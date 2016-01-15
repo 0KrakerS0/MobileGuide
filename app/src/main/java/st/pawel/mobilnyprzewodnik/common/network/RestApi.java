@@ -17,6 +17,7 @@ public interface RestApi {
         String PREFIX_ONE_CLASSES = "/1/classes";
         String CLASSES_CITY = PREFIX_ONE_CLASSES +"/City";
         String CLASSES_OBJECT = PREFIX_ONE_CLASSES +"/Object";
+        String CLASSES_TRAVEL = PREFIX_ONE_CLASSES +"/Travel";
 
     }
 }
