@@ -24,15 +24,21 @@
             android:value="AIzaSyDjPpL9ln_2BBYCvucGJmq2ez1IYo3sA8g" />
 
         <activity
-            android:name="st.pawel.mobilnyprzewodnik.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+                android:name=".auth.ui.SplashActivity"
+                android:theme="@style/AppTheme.FullScreen" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+                android:name=".auth.ui.LoginActivity"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="st.pawel.mobilnyprzewodnik.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".city.ui.CityActivity"
             android:theme="@style/AppTheme.NoActionBar" />

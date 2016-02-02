@@ -1,5 +1,6 @@
 package st.pawel.mobilnyprzewodnik;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import  android.support.v4.app.Fragment;
@@ -251,5 +252,12 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
             }
         });
 
+    }
+
+    public static class IntentFactory {
+
+        public static Intent forDisplay(Context context) {
+            return new Intent(context, MainActivity.class);
+        }
     }
 }
