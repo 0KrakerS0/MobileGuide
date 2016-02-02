@@ -12,6 +12,14 @@
     <string name="main_menu_user_data">Dane użytkownika</string>
     <string name="main_menu_logout">Wyloguj</string>
 
+    <!-- login -->
+    <string name="login_user_login">Login</string>
+    <string name="login_user_password">Hasło</string>
+    <string name="login_user_button_label">Zaloguj</string>
+    <string name="login_empty_data_message">Podaj login i hasło</string>
+    <string name="login_server_error_message">Błąd logowania. Sprawdź połącznie internetowe i wprowadź poprawne dane!</string>
+    <string name="login_wrong_data_message">Błąd logowania. Wprowadź poprawne dane!</string>
+
     <!-- add city -->
     <string name="add_city_name_hint">Nazwa miasta</string>
 

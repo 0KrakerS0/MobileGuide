@@ -21,6 +21,7 @@ import junit.framework.TestResult;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
+import st.pawel.mobilnyprzewodnik.auth.logic.AuthManager;
 import st.pawel.mobilnyprzewodnik.city.delegate.CityFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.city.listener.OnCityRequestListener;
 import st.pawel.mobilnyprzewodnik.city.model.CityModel;
@@ -100,7 +101,8 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
                 Toast.makeText(this, "Jeszcze nie działa dla " + menu.name(), Toast.LENGTH_SHORT).show();
                 break;
             case LOGOUT:
-                Toast.makeText(this, "Jeszcze nie działa dla " + menu.name(), Toast.LENGTH_SHORT).show();
+                AuthManager.INSTANCE.logout();
+                finish();
                 break;
         }
         mainDrawer.closeDrawer(GravityCompat.START);

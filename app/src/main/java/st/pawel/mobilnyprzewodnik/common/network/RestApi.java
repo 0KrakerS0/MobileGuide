@@ -18,6 +18,11 @@ public interface RestApi {
         String CLASSES_CITY = PREFIX_ONE_CLASSES +"/City";
         String CLASSES_OBJECT = PREFIX_ONE_CLASSES +"/Object";
         String CLASSES_TRAVEL = PREFIX_ONE_CLASSES +"/Travel";
+        String CLASSES_USERS = PREFIX_ONE_CLASSES +"/Users";
 
+    }
+
+    interface Query {
+        String WHERE = "where";
     }
 }
