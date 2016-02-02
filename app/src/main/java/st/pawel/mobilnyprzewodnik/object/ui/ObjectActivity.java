@@ -27,6 +27,9 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 import st.pawel.mobilnyprzewodnik.R;
+import st.pawel.mobilnyprzewodnik.city.listener.OnCityRequestListener;
+import st.pawel.mobilnyprzewodnik.city.model.CityResults;
+import st.pawel.mobilnyprzewodnik.city.network.GetCityRequest;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
 import st.pawel.mobilnyprzewodnik.common.util.C;
 import st.pawel.mobilnyprzewodnik.common.util.LocationProvider;
@@ -129,6 +132,33 @@ public class ObjectActivity extends BaseActivity implements ObjectAddDelegate, L
         locationManager.removeUpdates(this, this);
         final DialogMapFragment dialogMapFragment = DialogMapFragment.newInstance(latLng);
         dialogMapFragment.show(getSupportFragmentManager(), MAP_TAG);
+    }
+
+    @Override
+    public void requestForCityList() {
+        GetCityRequest.instance().request().enqueue(new Callback<CityResults>() {
+            @Override
+            public void onResponse(Response<CityResults> response, Retrofit retrofit) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.object_container);
+                if (fragment == null || !(fragment instanceof OnCityRequestListener)) {
+                    return;
+                }
+                OnCityRequestListener listener = (OnCityRequestListener) fragment;
+
+                listener.onCityRequestSuccess(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.object_container);
+                if (fragment == null || !(fragment instanceof OnCityRequestListener)) {
+                    return;
+                }
+                OnCityRequestListener listener = (OnCityRequestListener) fragment;
+                listener.onCityRequestFailure();
+            }
+        });
     }
 
     @Override

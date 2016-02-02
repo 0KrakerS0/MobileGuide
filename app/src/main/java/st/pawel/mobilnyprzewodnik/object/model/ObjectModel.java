@@ -4,6 +4,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 import lombok.Setter;
 import org.parceler.Parcel;
+import st.pawel.mobilnyprzewodnik.city.model.CityModel;
 import st.pawel.mobilnyprzewodnik.map.model.MarkerType;
 import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
 
@@ -26,6 +27,8 @@ public class ObjectModel implements ObjectView {
         String LATITUDE = "latitude";
 
         String LONGITUDE = "longitude";
+
+        String CITY = "city";
     }
 
     @Setter
@@ -55,6 +58,10 @@ public class ObjectModel implements ObjectView {
     @Setter
     @SerializedName(Metadata.LONGITUDE)
     double longitude;
+
+    @Setter
+    @SerializedName(Metadata.CITY)
+    CityModel city;
 
     @Override
     public String objectImageUrl() {

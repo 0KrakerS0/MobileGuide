@@ -4,6 +4,7 @@ import com.google.android.gms.maps.model.LatLng;
 import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
 
 public interface ObjectAddDelegate {
+
     void addObject(ObjectModel objectModel);
 
     LatLng requestForLastKnownPosition();
@@ -11,4 +12,6 @@ public interface ObjectAddDelegate {
     void requestForLocationFromMap(LatLng latLng);
 
     void requestForTakePhoto();
+
+    void requestForCityList();
 }

@@ -24,15 +24,21 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.File;
 import java.security.SecureRandom;
 import st.pawel.mobilnyprzewodnik.R;
+import st.pawel.mobilnyprzewodnik.city.listener.OnCityRequestListener;
+import st.pawel.mobilnyprzewodnik.city.model.CityModel;
+import st.pawel.mobilnyprzewodnik.city.model.CityResults;
+import st.pawel.mobilnyprzewodnik.city.ui.model.CityView;
 import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
 import st.pawel.mobilnyprzewodnik.map.model.MarkerType;
 import st.pawel.mobilnyprzewodnik.object.delegate.ObjectAddDelegate;
 import st.pawel.mobilnyprzewodnik.object.listener.OnLocationRequestListener;
 import st.pawel.mobilnyprzewodnik.object.listener.OnPhotoTakenListener;
 import st.pawel.mobilnyprzewodnik.object.model.ObjectModel;
+import st.pawel.mobilnyprzewodnik.object.ui.adapter.ObjectCitySpinnerAdapter;
 import st.pawel.mobilnyprzewodnik.object.ui.adapter.ObjectTypeSpinnerAdapter;
 
-public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> implements OnLocationRequestListener, OnPhotoTakenListener {
+public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate>
+        implements OnLocationRequestListener, OnPhotoTakenListener, OnCityRequestListener {
 
     private static final String LAT_LONG_SEPARATOR = ";";
 
@@ -45,7 +51,7 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
     EditText objectName;
 
     @Bind(R.id.add_object_city_name)
-    EditText objectCityName;
+    Spinner objectCityName;
 
     @Bind(R.id.add_object_location)
     TextView objectLocation;
@@ -57,6 +63,8 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
     RatingBar objectRate;
 
     String filePath;
+
+    final ObjectCitySpinnerAdapter cityListAdapter = new ObjectCitySpinnerAdapter();
 
     private final StringBuilder sb = new StringBuilder();
 
@@ -76,7 +84,9 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
         View result = inflater.inflate(R.layout.fragment_add_object, container, false);
         ButterKnife.bind(this, result);
         prepareObjectTypeSpinner();
+        objectCityName.setAdapter(cityListAdapter);
         if (savedInstanceState == null) {
+            delegate.requestForCityList();
             prepareObjectLocationText();
         }
         return result;
@@ -114,7 +124,8 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
             //TODO tymczasowy obrazek
             objectModel.setObjectImageUrl("http://lorempixel.com/200/400/city/" + new SecureRandom().nextInt(10) + "/");
             objectModel.setObjectType((MarkerType) objectType.getSelectedItem());
-            objectModel.setObjectCityName(objectCityName.getText().toString());
+            CityModel cityModel = (CityModel) objectCityName.getSelectedItem();
+            objectModel.setObjectCityName(cityModel.cityName());
             objectModel.setObjectRate(objectRate.getRating());
             String location = objectLocation.getText().toString();
             if (!location.isEmpty()) {
@@ -162,6 +173,7 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(PHOTO_PATH, filePath);
+        cityListAdapter.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
 
@@ -176,6 +188,7 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
             return;
         }
         onPhotoTaken(filePath);
+        cityListAdapter.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -184,13 +197,31 @@ public class AddObjectFragment extends DelegateBaseFragment<ObjectAddDelegate> i
         File imgFile = new File(photoPath);
         if (imgFile.exists()) {
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            if(myBitmap == null){
+            if (myBitmap == null) {
                 return;
             }
             objectPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
             objectPhoto.setImageBitmap(myBitmap);
 
         }
+    }
+
+    @Override
+    public void onCityRequestStart() {
+
+    }
+
+    @Override
+    public void onCityRequestSuccess(CityResults cityViews) {
+        for(CityView cityView : cityViews){
+            cityListAdapter.add(cityView);
+        }
+        cityListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCityRequestFailure() {
+
     }
 
     private String locationText(double latitude, double longitude) {
