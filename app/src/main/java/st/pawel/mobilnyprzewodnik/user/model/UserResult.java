@@ -44,4 +44,8 @@ public class UserResult implements Iterable<User> {
     public User getFirst() {
         return userList.get(0);
     }
+
+    public int size(){
+        return userList != null ? userList.size() : 0;
+    }
 }

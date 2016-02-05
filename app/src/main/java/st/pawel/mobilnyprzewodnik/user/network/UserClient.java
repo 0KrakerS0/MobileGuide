@@ -10,4 +10,7 @@ public interface UserClient {
 
     @GET(RestApi.Endpoint.CLASSES_USERS)
     Call<UserResult> login(@Query(RestApi.Query.WHERE) String where);
+
+    @GET(RestApi.Endpoint.CLASSES_USERS)
+    Call<UserResult> userData(@Query(RestApi.Query.WHERE) String where);
 }

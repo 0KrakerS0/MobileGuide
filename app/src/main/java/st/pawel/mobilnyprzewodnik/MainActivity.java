@@ -2,9 +2,8 @@ package st.pawel.mobilnyprzewodnik;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import  android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -13,11 +12,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import junit.framework.TestResult;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -32,6 +26,7 @@ import st.pawel.mobilnyprzewodnik.city.ui.CityFragment;
 import st.pawel.mobilnyprzewodnik.common.ui.BaseActivity;
 import st.pawel.mobilnyprzewodnik.common.util.C;
 import st.pawel.mobilnyprzewodnik.main.delegate.MenuFragmentDelegate;
+import st.pawel.mobilnyprzewodnik.main.listener.OnUserDataRequestSuccess;
 import st.pawel.mobilnyprzewodnik.main.model.MainMenu;
 import st.pawel.mobilnyprzewodnik.main.ui.MenuFragment;
 import st.pawel.mobilnyprzewodnik.map.ui.MainMapFragment;
@@ -42,16 +37,21 @@ import st.pawel.mobilnyprzewodnik.object.model.ObjectResult;
 import st.pawel.mobilnyprzewodnik.object.network.GetObjectRequest;
 import st.pawel.mobilnyprzewodnik.object.ui.ObjectActivity;
 import st.pawel.mobilnyprzewodnik.object.ui.ObjectFragment;
-import st.pawel.mobilnyprzewodnik.object.ui.model.ObjectView;
 import st.pawel.mobilnyprzewodnik.travels.delegate.TravelFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.travels.listener.OnTravelsRequestListener;
 import st.pawel.mobilnyprzewodnik.travels.model.TravelModel;
 import st.pawel.mobilnyprzewodnik.travels.model.TravelResult;
 import st.pawel.mobilnyprzewodnik.travels.network.GetTravelRequest;
 import st.pawel.mobilnyprzewodnik.travels.ui.TravelsFragment;
-import st.pawel.mobilnyprzewodnik.travels.ui.model.TravelView;
+import st.pawel.mobilnyprzewodnik.user.delegate.UserDataFragmentDelegate;
+import st.pawel.mobilnyprzewodnik.user.model.User;
+import st.pawel.mobilnyprzewodnik.user.model.UserResult;
+import st.pawel.mobilnyprzewodnik.user.network.UserDataRequest;
+import st.pawel.mobilnyprzewodnik.user.ui.UserDataFragment;
 
-public class MainActivity extends BaseActivity implements MenuFragmentDelegate<MainMenu>, CityFragmentDelegate<CityModel>, TravelFragmentDelegate<TravelModel>, ObjectfFragmentDelegate<ObjectModel> {
+public class MainActivity extends BaseActivity
+        implements MenuFragmentDelegate<MainMenu, User>, CityFragmentDelegate<CityModel>, TravelFragmentDelegate<TravelModel>,
+        ObjectfFragmentDelegate<ObjectModel>, UserDataFragmentDelegate {
 
     @Bind(R.id.main_toolbar)
     Toolbar mainActionBar;
@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         prepareActionBar(mainActionBar);
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             return;
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.main_menu_container, MenuFragment.newInstance()).commit();
@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
     }
 
     @Override
-    public void onMenuItemClick(MainMenu menu) {
+    public void onMenuItemClick(MainMenu menu, User user) {
 
         switch (menu) {
             case MAP:
@@ -98,7 +98,11 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, ObjectFragment.newInstance()).commit();
                 break;
             case USER_DATA:
-                Toast.makeText(this, "Jeszcze nie działa dla " + menu.name(), Toast.LENGTH_SHORT).show();
+                if (user == null) {
+                    Toast.makeText(this, R.string.user_data_can_not_display_user_daata, Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, UserDataFragment.newInstance(user)).commit();
                 break;
             case LOGOUT:
                 AuthManager.INSTANCE.logout();
@@ -120,7 +124,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
 
     @Override
     public void onObjectClick(ObjectModel objectModel) {
-        Toast.makeText(this,"Kliknales " + objectModel.objectName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Kliknales " + objectModel.objectName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -169,9 +173,35 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
         });
     }
 
+
+    @Override
+    public void requestForUserData() {
+        UserDataRequest.instance(AuthManager.INSTANCE.userId()).request().enqueue(new Callback<UserResult>() {
+            @Override
+            public void onResponse(Response<UserResult> response, Retrofit retrofit) {
+                final UserResult userResult = response.body();
+                if (userResult.size() == 0) {
+                    return;
+                }
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_menu_container);
+                if (fragment == null || !(fragment instanceof OnUserDataRequestSuccess)) {
+                    return;
+                }
+                OnUserDataRequestSuccess listener = (OnUserDataRequestSuccess) fragment;
+
+                listener.onUserDataRequestSuccess(userResult.getFirst());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+
     @Override
     public void onAddCityButtonClick() {
-       startActivityForResult(CityActivity.IntentFactory.forDisplay(this), C.RequestCode.ADD_NEW_CITY);
+        startActivityForResult(CityActivity.IntentFactory.forDisplay(this), C.RequestCode.ADD_NEW_CITY);
     }
 
     @Override
@@ -182,21 +212,21 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_OK){
+        if (resultCode != RESULT_OK) {
             return;
         }
-        if(requestCode == C.RequestCode.ADD_NEW_CITY){
+        if (requestCode == C.RequestCode.ADD_NEW_CITY) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-            if(fragment != null && fragment instanceof OnCityRequestListener){
+            if (fragment != null && fragment instanceof OnCityRequestListener) {
                 OnCityRequestListener onCityRequestListener = (OnCityRequestListener) fragment;
                 onCityRequestListener.onCityRequestStart();
                 requestForCityList();
                 return;
             }
         }
-        if(requestCode == C.RequestCode.ADD_NEW_OBJECT){
+        if (requestCode == C.RequestCode.ADD_NEW_OBJECT) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-            if(fragment != null && fragment instanceof OnObjectRequestListener){
+            if (fragment != null && fragment instanceof OnObjectRequestListener) {
                 OnObjectRequestListener onObjectRequestListener = (OnObjectRequestListener) fragment;
                 onObjectRequestListener.onObjectRequestStart();
                 requestForObjectList();
@@ -236,7 +266,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
             @Override
             public void onResponse(Response<ObjectResult> response, Retrofit retrofit) {
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-                if (fragment == null || !(fragment instanceof OnObjectRequestListener)){
+                if (fragment == null || !(fragment instanceof OnObjectRequestListener)) {
                     return;
                 }
                 OnObjectRequestListener listener = (OnObjectRequestListener) fragment;
@@ -246,7 +276,7 @@ public class MainActivity extends BaseActivity implements MenuFragmentDelegate<M
             @Override
             public void onFailure(Throwable t) {
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-                if (fragment == null || !(fragment instanceof OnObjectRequestListener)){
+                if (fragment == null || !(fragment instanceof OnObjectRequestListener)) {
                     return;
                 }
                 OnObjectRequestListener listener = (OnObjectRequestListener) fragment;

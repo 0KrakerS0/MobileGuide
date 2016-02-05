@@ -42,4 +42,14 @@
     <string name="marker_type_fast_food">Fast Food</string>
     <string name="marker_type_tourist_information">Informacja turystyczna</string>
     <string name="marker_type_unknown">Nieznany</string>
+
+    <!-- User data -->
+    <string name="user_data_can_not_display_user_daata">Nie można wyświtelić danych użytkownika.</string>
+    <string name="user_data_login_hint">Login</string>
+    <string name="user_data_first_name_hint">Imię</string>
+    <string name="user_data_last_name_hint">Nazwisko</string>
+    <string name="user_data_email_hint">Email</string>
+    <string name="user_data_password_hint">Hasło</string>
+    <string name="user_data_confirm_password_hint">Potwiedź hasło</string>
+    <string name="user_data_update_button_label">Aktualizuj dane</string>
 </resources>

@@ -4,8 +4,10 @@ package st.pawel.mobilnyprzewodnik.user.model;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
+import org.parceler.Parcel;
 import st.pawel.mobilnyprzewodnik.main.ui.model.UserView;
 
+@Parcel
 public class User implements UserView {
 
     private interface Metadata {
@@ -56,12 +58,12 @@ public class User implements UserView {
 
     @Override
     public String userImageUrl() {
-        return null;
+        return imageUrl;
     }
 
     @Override
     public String userFullName() {
-        return null;
+        return firstName + " " + lastName;
     }
 
     @Override
