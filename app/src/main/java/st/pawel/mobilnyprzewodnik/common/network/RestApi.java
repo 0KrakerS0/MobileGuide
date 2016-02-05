@@ -19,7 +19,12 @@ public interface RestApi {
         String CLASSES_OBJECT = PREFIX_ONE_CLASSES +"/Object";
         String CLASSES_TRAVEL = PREFIX_ONE_CLASSES +"/Travel";
         String CLASSES_USERS = PREFIX_ONE_CLASSES +"/Users";
+        String CLASSES_USERS_USER_ID = PREFIX_ONE_CLASSES + "/Users/{" + Param.USER_ID + "}/";
 
+    }
+
+    interface Param {
+        String USER_ID = "USER_ID";
     }
 
     interface Query {

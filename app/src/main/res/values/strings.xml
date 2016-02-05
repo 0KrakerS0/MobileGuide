@@ -52,4 +52,7 @@
     <string name="user_data_password_hint">Hasło</string>
     <string name="user_data_confirm_password_hint">Potwiedź hasło</string>
     <string name="user_data_update_button_label">Aktualizuj dane</string>
+    <string name="user_data_password_are_different">Podane hasła są różne - usuń je albo poraw tak żeby były spójne.</string>
+    <string name="user_data_update_success">Dane użytkownika zostały zaktualizowne.</string>
+    <string name="user_data_update_failed">Błąd podaczas aktualizowania danych.</string>
 </resources>

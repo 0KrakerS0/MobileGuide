@@ -7,13 +7,15 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import org.parceler.Parcels;
 import st.pawel.mobilnyprzewodnik.R;
+import st.pawel.mobilnyprzewodnik.auth.logic.AuthManager;
 import st.pawel.mobilnyprzewodnik.common.ui.DelegateBaseFragment;
 import st.pawel.mobilnyprzewodnik.common.util.ImageLoaderProvider;
 import st.pawel.mobilnyprzewodnik.user.delegate.UserDataFragmentDelegate;
@@ -43,9 +45,6 @@ public class UserDataFragment extends DelegateBaseFragment<UserDataFragmentDeleg
 
     @Bind(R.id.user_data_confirm_password)
     EditText confirmPassword;
-
-    @Bind(R.id.user_data_button)
-    Button button;
 
     public static UserDataFragment newInstance(User user) {
         UserDataFragment userDataFragment = new UserDataFragment();
@@ -110,4 +109,23 @@ public class UserDataFragment extends DelegateBaseFragment<UserDataFragmentDeleg
         email.setText(user.getEmail());
     }
 
+    @OnClick(R.id.user_data_button)
+    void onUpdateUserDataClick() {
+        User user = new User();
+        user.setObjectId(AuthManager.INSTANCE.userId());
+        user.setFirstName(firstName.getText().toString());
+        user.setLastName(lastName.getText().toString());
+        String passwordText = password.getText().toString();
+        String confirmPasswordText = confirmPassword.getText().toString();
+        if (passwordText.isEmpty() && confirmPasswordText.isEmpty()) {
+            delegate.updateUserData(user);
+            return;
+        }
+        if (!passwordText.equals(confirmPasswordText)) {
+            Toast.makeText(getActivity(), R.string.user_data_password_are_different, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        user.setPassword(passwordText);
+        delegate.updateUserData(user);
+    }
 }

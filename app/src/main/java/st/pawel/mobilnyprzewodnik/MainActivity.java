@@ -46,6 +46,7 @@ import st.pawel.mobilnyprzewodnik.travels.ui.TravelsFragment;
 import st.pawel.mobilnyprzewodnik.user.delegate.UserDataFragmentDelegate;
 import st.pawel.mobilnyprzewodnik.user.model.User;
 import st.pawel.mobilnyprzewodnik.user.model.UserResult;
+import st.pawel.mobilnyprzewodnik.user.network.UpdateUserRequest;
 import st.pawel.mobilnyprzewodnik.user.network.UserDataRequest;
 import st.pawel.mobilnyprzewodnik.user.ui.UserDataFragment;
 
@@ -195,6 +196,21 @@ public class MainActivity extends BaseActivity
             @Override
             public void onFailure(Throwable t) {
 
+            }
+        });
+    }
+
+    @Override
+    public void updateUserData(User user) {
+        UpdateUserRequest.instance(AuthManager.INSTANCE.userId(), user).request().enqueue(new Callback<UserResult>() {
+            @Override
+            public void onResponse(Response<UserResult> response, Retrofit retrofit) {
+                Toast.makeText(MainActivity.this, R.string.user_data_update_success, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(MainActivity.this, R.string.user_data_update_failed, Toast.LENGTH_SHORT).show();
             }
         });
     }
